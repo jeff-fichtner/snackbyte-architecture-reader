@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1",
+  "feature": "001-reader-first-version",
+  "workspaceId": "90141363864",
+  "spaceId": "90149548887",
+  "listId": "901423218591",
+  "statusMapping": {
+    "open": "backlog",
+    "in-design": "in design",
+    "ready": "ready for development",
+    "in-development": "in development",
+    "in-review": "in review",
+    "done": "shipped"
+  },
+  "card": {
+    "id": "86bd27mcr",
+    "hash": "sha256:663f597b36e4a862c60503df607af088a7ad4083540e2b4012d8152c97609418",
+    "provenanceHash": "sha256:90114040fedcbed7b94251a760868666ffc3f14ca45b4022766d0e51d204c244"
+  },
+  "userStories": [
+    {
+      "us": "US1",
+      "id": "86bd27mh3",
+      "hash": "sha256:e94743ac1b6fd240ba305e9963bbf17b86bd25f5c724bb2a30890a16d21fa3d3",
+      "dependsOn": []
+    },
+    {
+      "us": "US3",
+      "id": "86bd27mhj",
+      "hash": "sha256:d6f873042c1030d82ee7d6ce18d6cf4fd1f1f5e056ebce8b2c95e320c09a255b",
+      "dependsOn": [
+        "US1",
+        "US2"
+      ]
+    },
+    {
+      "us": "US2",
+      "id": "86bd27mhb",
+      "hash": "sha256:5d1c086c739b84431260eb6e42d12e412dc0ec0e4029cee369357aba8966a4d3",
+      "dependsOn": [
+        "US1"
+      ]
+    },
+    {
+      "us": "US4",
+      "id": "86bd27mhw",
+      "hash": "sha256:acc94a825065fa903bd07edced299083a7f268a9f5047f559d9b895f37ea9b97",
+      "dependsOn": [
+        "US1",
+        "US2",
+        "US3"
+      ]
+    }
+  ],
+  "lifecycle": {
+    "analyzed": true
+  }
+}
