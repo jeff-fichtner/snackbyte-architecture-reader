@@ -33,3 +33,17 @@ Spec Kit tooling:
   symlinks back: replace them with files again afterwards
   (`find .claude/skills -type l -exec sh -c 'cp "$1" "$1.tmp" && mv "$1.tmp" "$1"' sh '{}' ';'`).
   A re-install is also the only way a `--dev` install updates.
+
+Code:
+- `src/`: `cli.ts` (the command) → `main.ts` (one run: settings, programs, codebase, parts,
+  relationships, refusals, entries, paths, report). `declarations.ts` matches the declarations
+  settings name; `report.ts` owns the report's one fixed form.
+- Gate: `npm run check:all` (format, lint, typecheck, build, tests). The command tests run the
+  built `dist/`.
+- Fixtures: `tests/fixtures/<name>/` is a small codebase with `architecture-reader.json` and,
+  where it has one, `expected.json`, written by hand from the rules, never copied from the
+  reader's output. Stand-in packages live in each fixture's committed `node_modules/`.
+- `npm run test:consumer` runs the reader on a real codebase: `CONSUMER_ROOT` and
+  `CONSUMER_SETTINGS` (both required). For the first consumer, `local/copy-consumer.sh` copies its
+  tree into `local/consumer/` with the draft settings; `local/` is never committed.
+- Deferred reviews: `specs/reviews.md`, read at every feature's close.

@@ -52,9 +52,9 @@
   unnamed function is added before it inside the same enclosing part. Names that coincide with the
   first consumer's own scheme (`path#name`) make its translation simple, without shaping the
   format for it.
-- **Uniqueness**: two parts that would get the same id (declaration merging, overloads) are one
-  part: overload signatures fold into their implementation, merged declarations share an id. Any
-  remaining collision is a reader bug and stops the run naming both places.
+- **Uniqueness**: overload signatures fold into their implementation. Any other two parts that would
+  share an id (merged declarations, two object literals with the same property in one function) keep
+  apart by suffix: the later ones in source order take `~2`, `~3`.
 
 ## R5. Recognizing entries and error answers without names
 
@@ -72,6 +72,9 @@
   inside the engine's configuration object, its route handlers are inline functions handed to the
   router, and its scheduled job runs from one exported function, so every one of its entries is
   expressible this way.
+- **Extended types**: a contextual type that extends the named declaration matches it too (a
+  framework's handler interface that extends its core handler type), found through the checker's
+  base types. Found on the first consumer's code, 2026-11-11.
 - **Selector that matches nothing**: stops the run naming the rule (FR-012); a rule that matches
   nothing is a wrong rule, and a silent empty result would read as "no entries".
 
@@ -85,7 +88,10 @@
   in order, each listed once per path (where first reached); a part already on the path is not
   walked again, which also ends recursion. Paths with the same steps collapse into one trip.
   Enumeration keeps the distinct step lists so far and stops as soon as an entry passes the path
-  limit (FR-011b), so the run never builds the full product of branches before failing.
+  limit (FR-011b), so the run never builds the full product of branches before failing. The limit
+  counts distinct step lists, as trips do: the same steps ending two ways (returning, throwing) are
+  one path (found on the first consumer's code, where counting endings stopped an entry with 897
+  trips).
 - **Function values**: a codebase function handed to outside code is a step where it is handed
   over (FR-011a) unless an entry rule matches it. A codebase function used as a value in any
   other way (stored, handed to codebase code that calls it through a parameter) is a call the
@@ -115,6 +121,7 @@
 
 ## R9. Packaging and release
 
-- **Decision (parked, Jeff 2026-11-11)**: built as an installable package (a `bin` named
-  `architecture-reader`, `dist/` published), so either way of handing a fixed version to a
-  consumer works. How versions are released is decided before User Story 4's hand-off.
+- **Decision (best guess, 2026-11-11, on the deferred-review list in `specs/reviews.md`)**: a
+  consumer installs one exact version from a GitHub tag; the package builds itself on install
+  (`prepare`), verified by installing from a git URL into an empty project. Publishing to npm was
+  passed over for now: it needs the release flow wired and CI allowed to push tags.
