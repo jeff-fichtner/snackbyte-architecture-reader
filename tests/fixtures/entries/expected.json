@@ -50,6 +50,14 @@
       ]
     },
     {
+      "id": "src/app.ts#mw",
+      "kind": "function"
+    },
+    {
+      "id": "src/app.ts#mw/1",
+      "kind": "function"
+    },
+    {
       "id": "src/app.ts#named",
       "kind": "function"
     },
@@ -121,6 +129,13 @@
       "rule": "route",
       "steps": [
         "src/app.ts#createApp/1"
+      ]
+    },
+    {
+      "entry": "src/app.ts#mw/1",
+      "rule": "middleware",
+      "steps": [
+        "src/app.ts#mw/1"
       ]
     },
     {

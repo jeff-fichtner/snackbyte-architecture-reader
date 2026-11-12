@@ -220,7 +220,7 @@ export function collectEntries(
   function contextual(expression: ts.Expression, checker: ts.TypeChecker): ts.Node[] {
     const type =
       checker.getContextualType(unwrap(expression)) ?? checker.getContextualType(expression);
-    return type ? typeDeclarations(type) : [];
+    return type ? typeDeclarations(type, checker) : [];
   }
 
   /** The declarations of the property an object-literal member fills, and of that property's type. */
@@ -237,18 +237,29 @@ export function collectEntries(
       const property = type.getProperty(name);
       if (!property) continue;
       out.push(...(property.declarations ?? []));
-      out.push(...typeDeclarations(checker.getTypeOfSymbol(property)));
+      out.push(...typeDeclarations(checker.getTypeOfSymbol(property), checker));
     }
     return out;
   }
 }
 
-function typeDeclarations(type: ts.Type): ts.Node[] {
+/**
+ * The declarations a type comes from: its alias, its own symbol, the members of a union or
+ * intersection, and every interface or class it extends, so a type that extends the named one
+ * matches it too.
+ */
+function typeDeclarations(type: ts.Type, checker: ts.TypeChecker): ts.Node[] {
   const out: ts.Node[] = [];
-  const members = type.isUnion() || type.isIntersection() ? [type, ...type.types] : [type];
-  for (const member of members) {
+  const seen = new Set<ts.Type>();
+  const pending = type.isUnion() || type.isIntersection() ? [type, ...type.types] : [type];
+  while (pending.length > 0) {
+    const member = pending.pop() as ts.Type;
+    if (seen.has(member)) continue;
+    seen.add(member);
     out.push(...(member.aliasSymbol?.declarations ?? []));
     out.push(...(member.getSymbol()?.declarations ?? []));
+    const target = (member as ts.TypeReference).target ?? member;
+    if (target.isClassOrInterface()) pending.push(...(checker.getBaseTypes(target) ?? []));
   }
   return out;
 }

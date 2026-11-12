@@ -77,3 +77,10 @@ describe('paths', () => {
     expect(raised('src/many.ts#many')).toHaveLength(2048);
   });
 });
+
+describe('the path limit', () => {
+  it('counts distinct step lists, so the same steps ending two ways count once', () => {
+    const { trips: ends } = reportOf('path-limit', 'ends.json');
+    expect(ends('src/ends.ts#endsTwoWays')).toHaveLength(512);
+  });
+});

@@ -1,4 +1,4 @@
-import { router } from 'fake-router';
+import { router, type NamedMiddleware } from 'fake-router';
 import { Engine } from 'fake-engine';
 import { audit } from './audit.js';
 
@@ -29,4 +29,8 @@ function stored(): void {
 
 function register(fn: () => void): void {
   fn();
+}
+
+export function mw(): NamedMiddleware {
+  return (_req, _res, next) => next();
 }

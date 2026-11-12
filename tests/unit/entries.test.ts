@@ -49,3 +49,10 @@ describe('entries', () => {
     expect(() => reportOf('entries', 'notapart.json')).toThrow(/src\/app\.ts#missing.*not a part/);
   });
 });
+
+describe('entry types', () => {
+  it('match a type that extends the named declaration', () => {
+    const { report } = reportOf('entries');
+    expect(report.trips.find((t) => t.entry === 'src/app.ts#mw/1')?.rule).toBe('middleware');
+  });
+});

@@ -84,8 +84,14 @@ export function collectTrips(
 
   function distinct(outcomes: Outcome[]): Outcome[] {
     const seen = new Map<string, Outcome>();
-    for (const o of outcomes) seen.set(`${o.end}\u0001${o.steps.join('\u0000')}`, o);
-    if (seen.size > pathLimit) throw new PathLimit();
+    const stepLists = new Set<string>();
+    for (const o of outcomes) {
+      const steps = o.steps.join('\u0000');
+      seen.set(`${o.end}\u0001${steps}`, o);
+      stepLists.add(steps);
+    }
+    // The limit counts distinct step lists, as trips do: the same steps ending two ways are one path.
+    if (stepLists.size > pathLimit) throw new PathLimit();
     return [...seen.values()];
   }
 
