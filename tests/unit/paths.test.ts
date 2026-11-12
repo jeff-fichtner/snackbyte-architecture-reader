@@ -68,7 +68,7 @@ describe('paths', () => {
 
   it('stops naming the entry once it passes the path limit', () => {
     expect(() => reportOf('path-limit')).toThrow(
-      /src\/many\.ts#many has more than 1000 paths; raise pathLimit/,
+      /src\/many\.ts#many has more than 1000 paths \(\d+ found when the walk stopped\); raise pathLimit/,
     );
   });
 

@@ -137,3 +137,9 @@ constitution III). Within each story the test comes first and fails before the c
 - MVP is stage one (US1 + US2): a full part graph with refusals and checkpoints.
 - Stage two (US3) adds trips. US4 proves it on real code and hands it over.
 - `npm run check:all` stays green after every task.
+
+---
+
+## Phase 8: Convergence
+
+- [x] T037 Name the count of distinct paths found when the walk stops at the path limit, alongside the entry, per FR-011b (partial)

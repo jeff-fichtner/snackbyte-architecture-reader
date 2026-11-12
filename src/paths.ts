@@ -20,7 +20,11 @@ interface Outcome {
   end: End;
 }
 
-class PathLimit extends Error {}
+class PathLimit extends Error {
+  constructor(readonly found: number) {
+    super('path limit');
+  }
+}
 
 const OPEN: Outcome = { steps: [], end: 'open' };
 
@@ -59,7 +63,7 @@ export function collectTrips(
     } catch (error) {
       if (error instanceof PathLimit) {
         throw new StopError(
-          `${entry.id} has more than ${pathLimit} paths; raise pathLimit in the settings to allow more`,
+          `${entry.id} has more than ${pathLimit} paths (${error.found} found when the walk stopped); raise pathLimit in the settings to allow more`,
         );
       }
       throw error;
@@ -91,7 +95,7 @@ export function collectTrips(
       stepLists.add(steps);
     }
     // The limit counts distinct step lists, as trips do: the same steps ending two ways are one path.
-    if (stepLists.size > pathLimit) throw new PathLimit();
+    if (stepLists.size > pathLimit) throw new PathLimit(stepLists.size);
     return [...seen.values()];
   }
 
