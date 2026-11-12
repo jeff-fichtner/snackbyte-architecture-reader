@@ -1,5 +1,6 @@
 # Installed and generated
 node_modules/
+!tests/fixtures/**/node_modules/
 dist/
 .DS_Store
 
@@ -8,3 +9,6 @@ dist/
 .specify/extensions/*/local-config.yml
 .claude/settings.local.json
 specs/**/*.html
+
+# The first consumer's settings draft and throwaway checks: never committed
+local/

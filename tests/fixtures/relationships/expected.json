@@ -1,0 +1,139 @@
+{
+  "format": 1,
+  "parts": [
+    {
+      "id": "src/main.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/main.ts#make",
+          "kind": "calls"
+        },
+        {
+          "to": "pkg:kept",
+          "kind": "imports"
+        },
+        {
+          "to": "src/shapes.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#Lazy",
+      "kind": "type"
+    },
+    {
+      "id": "src/main.ts#created",
+      "kind": "variable"
+    },
+    {
+      "id": "src/main.ts#helper",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "pkg:kept",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#later",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/shapes.ts#Square.area",
+          "kind": "calls"
+        },
+        {
+          "to": "src/shapes.ts#Square.constructor",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#make",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/shapes.ts#Square.constructor",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#total",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#helper",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/shapes.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/shapes.ts#Base",
+      "kind": "class"
+    },
+    {
+      "id": "src/shapes.ts#Base.describe",
+      "kind": "method"
+    },
+    {
+      "id": "src/shapes.ts#Shape",
+      "kind": "interface"
+    },
+    {
+      "id": "src/shapes.ts#Square",
+      "kind": "class",
+      "rel": [
+        {
+          "to": "src/shapes.ts#Base",
+          "kind": "extends"
+        },
+        {
+          "to": "src/shapes.ts#Shape",
+          "kind": "implements"
+        }
+      ]
+    },
+    {
+      "id": "src/shapes.ts#Square.area",
+      "kind": "method",
+      "rel": [
+        {
+          "to": "src/shapes.ts#square",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/shapes.ts#Square.constructor",
+      "kind": "method",
+      "rel": [
+        {
+          "to": "src/shapes.ts#Base",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/shapes.ts#square",
+      "kind": "function"
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/main.ts#total",
+      "rule": "job",
+      "steps": [
+        "src/main.ts#total",
+        "src/main.ts#helper"
+      ]
+    }
+  ]
+}

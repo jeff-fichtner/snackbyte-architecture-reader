@@ -1,0 +1,22 @@
+{
+  "format": 1,
+  "parts": [
+    {
+      "id": "src/job.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/job.ts#run",
+      "kind": "function"
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/job.ts#run",
+      "rule": "job",
+      "steps": [
+        "src/job.ts#run"
+      ]
+    }
+  ]
+}

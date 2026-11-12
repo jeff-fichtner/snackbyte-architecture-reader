@@ -1,0 +1,151 @@
+{
+  "format": 1,
+  "parts": [
+    {
+      "id": "src/app.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/audit.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#createApp",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/app.ts#register",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#createApp.findAccount",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/audit.ts#audit",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#createApp.interactions.url",
+      "kind": "function"
+    },
+    {
+      "id": "src/app.ts#createApp/1",
+      "kind": "function"
+    },
+    {
+      "id": "src/app.ts#createApp/2",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/audit.ts#audit",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#named",
+      "kind": "function"
+    },
+    {
+      "id": "src/app.ts#register",
+      "kind": "function"
+    },
+    {
+      "id": "src/app.ts#stored",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/app.ts#table.stored",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#table",
+      "kind": "variable"
+    },
+    {
+      "id": "src/app.ts#table.stored",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/audit.ts#audit",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/audit.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/audit.ts#audit",
+      "kind": "function"
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/app.ts#createApp",
+      "rule": "job",
+      "steps": [
+        "src/app.ts#createApp",
+        "src/app.ts#createApp/2",
+        "src/audit.ts#audit",
+        "src/app.ts#register"
+      ]
+    },
+    {
+      "entry": "src/app.ts#createApp.findAccount",
+      "rule": "hook",
+      "steps": [
+        "src/app.ts#createApp.findAccount",
+        "src/audit.ts#audit"
+      ]
+    },
+    {
+      "entry": "src/app.ts#createApp.interactions.url",
+      "rule": "hook",
+      "steps": [
+        "src/app.ts#createApp.interactions.url"
+      ]
+    },
+    {
+      "entry": "src/app.ts#createApp/1",
+      "rule": "route",
+      "steps": [
+        "src/app.ts#createApp/1"
+      ]
+    },
+    {
+      "entry": "src/app.ts#named",
+      "rule": "route",
+      "steps": [
+        "src/app.ts#named"
+      ]
+    },
+    {
+      "entry": "src/app.ts#stored",
+      "rule": "value",
+      "steps": [
+        "src/app.ts#stored",
+        "src/app.ts#table.stored",
+        "src/audit.ts#audit"
+      ]
+    },
+    {
+      "entry": "src/app.ts#table.stored",
+      "rule": "value",
+      "steps": [
+        "src/app.ts#table.stored",
+        "src/audit.ts#audit"
+      ]
+    }
+  ]
+}

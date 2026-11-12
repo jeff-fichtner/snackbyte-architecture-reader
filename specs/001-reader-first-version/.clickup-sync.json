@@ -14,7 +14,7 @@
   },
   "card": {
     "id": "86bd27mcr",
-    "hash": "sha256:663f597b36e4a862c60503df607af088a7ad4083540e2b4012d8152c97609418",
+    "hash": "sha256:95ee80a5130b677f7e0113bff0d7ce3bf9e095d5f174685ad4bd5116f1f8b3bc",
     "provenanceHash": "sha256:90114040fedcbed7b94251a760868666ffc3f14ca45b4022766d0e51d204c244"
   },
   "userStories": [
@@ -53,6 +53,7 @@
     }
   ],
   "lifecycle": {
-    "analyzed": true
+    "analyzed": true,
+    "implementStarted": true
   }
 }

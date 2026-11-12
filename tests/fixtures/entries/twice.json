@@ -1,0 +1,8 @@
+{
+  "format": 1,
+  "projects": ["tsconfig.json"],
+  "entries": [
+    { "name": "route", "type": { "module": "fake-router", "name": "Handler" } },
+    { "name": "again", "declarations": ["src/app.ts#named"] }
+  ]
+}

@@ -1,0 +1,503 @@
+{
+  "format": 1,
+  "parts": [
+    {
+      "id": "src/flow.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/flow.ts#Holder",
+      "kind": "class"
+    },
+    {
+      "id": "src/flow.ts#Holder.run",
+      "kind": "method",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#a",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#answered",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#refuse",
+          "kind": "calls"
+        }
+      ],
+      "refuses": [
+        {
+          "what": "refused"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#b",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#branch",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#check",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#keys",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#caught",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#keys",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#risky",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#check",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#collapse",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#divided",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#inner",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#guard",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#keys",
+          "kind": "calls"
+        }
+      ],
+      "refuses": [
+        {
+          "what": "no"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#inner",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#b",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#keys",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#log",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#logical",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#b",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#loop",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#optional",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#Holder.run",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#recursive",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#refuse",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#returns",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#risky",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "risky"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#straight",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#check",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#keys",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#switching",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#b",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#ternary",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#b",
+          "kind": "calls"
+        }
+      ]
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/flow.ts#answered",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#answered",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#answered",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#answered",
+        "src/flow.ts#refuse"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#branch",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#branch",
+        "src/flow.ts#check",
+        "src/flow.ts#keys"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#branch",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#branch",
+        "src/flow.ts#keys"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#caught",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#caught",
+        "src/flow.ts#risky",
+        "src/flow.ts#keys"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#caught",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#caught",
+        "src/flow.ts#risky",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#collapse",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#collapse",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#divided",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#divided",
+        "src/flow.ts#inner",
+        "src/flow.ts#a",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#divided",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#divided",
+        "src/flow.ts#inner",
+        "src/flow.ts#b",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#guard",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#guard"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#guard",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#guard",
+        "src/flow.ts#keys"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#logical",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#logical"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#logical",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#logical",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#logical",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#logical",
+        "src/flow.ts#a",
+        "src/flow.ts#b"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#logical",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#logical",
+        "src/flow.ts#b"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#loop",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#loop",
+        "src/flow.ts#a",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#loop",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#loop",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#optional",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#optional"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#optional",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#optional",
+        "src/flow.ts#Holder.run",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#recursive",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#recursive",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#returns",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#returns"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#returns",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#returns",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#straight",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#straight",
+        "src/flow.ts#check",
+        "src/flow.ts#keys",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#switching",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#switching",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#switching",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#switching",
+        "src/flow.ts#b",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#switching",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#switching",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#ternary",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#ternary",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#ternary",
+      "rule": "scenario",
+      "steps": [
+        "src/flow.ts#ternary",
+        "src/flow.ts#b"
+      ]
+    }
+  ]
+}
