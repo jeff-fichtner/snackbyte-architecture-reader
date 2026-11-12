@@ -121,7 +121,11 @@
 
 ## R9. Packaging and release
 
-- **Decision (best guess, 2026-11-11, on the deferred-review list in `specs/reviews.md`)**: a
-  consumer installs one exact version from a GitHub tag; the package builds itself on install
-  (`prepare`), verified by installing from a git URL into an empty project. Publishing to npm was
-  passed over for now: it needs the release flow wired and CI allowed to push tags.
+- **Decision (best guess, 2026-11-11, on the deferred-review list in `specs/reviews.md`)**: each
+  release attaches the packed package (`npm pack`, which builds first through `prepack`) to its
+  GitHub release; a consumer installs that tarball URL, and its lockfile pins the integrity, so
+  `npm ci` installs the same bytes with no build and no install script. Verified by installing the
+  tarball over HTTP into an empty project and reinstalling with `npm ci` from the lockfile.
+- **Passed over**: a git tag built on install. `prepack` does not run for git installs on npm
+  11.20, and `prepare` does but is flagged as an install script, running a build in the
+  consumer's CI. Publishing to npm needs the release flow wired and CI allowed to push tags.

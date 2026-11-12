@@ -32,13 +32,21 @@ it into whatever file it draws from.
 
 ## Install
 
-Install one exact version from a release tag:
+Each release carries the packed package, built, as an asset of its GitHub release. Install one
+exact version from it; npm records the tarball's integrity, so `npm ci` installs the same bytes:
 
 ```text
-npm install --save-dev github:jeff-fichtner/snackbyte-architecture-reader#v0.1.0
+npm install --save-dev https://github.com/jeff-fichtner/snackbyte-architecture-reader/releases/download/v0.1.0/snackbyte-architecture-reader-0.1.0.tgz
 ```
 
-The package builds itself when it is installed. Node.js 24 or later.
+The package needs no build and runs no install script. Node.js 24 or later.
+
+## Release
+
+On `main`, at the commit to release, with `version` in `package.json` set to the release's
+version: `npm pack` builds and packs `snackbyte-architecture-reader-<version>.tgz`, and
+`gh release create v<version> snackbyte-architecture-reader-<version>.tgz` publishes it with its
+tag.
 
 ## Develop
 
