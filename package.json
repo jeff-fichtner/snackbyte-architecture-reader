@@ -14,7 +14,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "npm run build",
+    "prepack": "npm run build",
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
