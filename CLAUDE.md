@@ -3,7 +3,9 @@
 A standalone tool that reads a TypeScript codebase with the TypeScript compiler and writes,
 deterministically, how its parts relate (who imports, calls, implements and extends whom), where
 each function turns a request away, and the path each entry point takes through the code. Its
-output goes into the codebase's `architecture.json`, in the format its first consumer defines.
+output is a report in a format the reader owns; each consumer translates it into its own
+`architecture.json`. It applies to any TypeScript codebase, and is proven on the first consumer's
+code first (Jeff, 2026-11-11).
 
 Tracked files never name another repository: not in code, docs, specs, tests or commit messages
 (Jeff, 2026-11-11). Say "the first consumer". The names, the contract's location and how to
@@ -19,8 +21,10 @@ Decided (Jeff, 2026-11-10):
 Constraints:
 - Deterministic: the same code gives the same bytes.
 - The TypeScript compiler is the only source.
-- The output format belongs to the consumer. Read it from the consumer; don't copy it here, and
-  never change the consumer from here.
+- The reader owns its report format, documented in this repository. Nothing in it is shaped for
+  one consumer; what differs per codebase (entries, error answers) is supplied per codebase.
+- The first consumer's contract is what its translation must reach. Read it there; don't copy it
+  here, and never change the consumer from here.
 
 Spec Kit tooling:
 - The speckit engine extensions (engine, git-lifecycle, review-loop, clickup) were installed with

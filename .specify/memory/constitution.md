@@ -38,18 +38,24 @@ code.
 
 Rationale: a guess that is wrong is drawn as fact; an explicit marker is visible and reviewable.
 
-### VI. The Output Format Belongs to the Consumer
+### VI. The Reader Owns Its Format; Consumers Adapt
 
-The reader writes the format its consumer defines (first: the first consumer's
-`architecture.json` contract). The format is read from the consumer, never copied here. A change to the format MUST
-be requested of the consumer, never made here.
+The reader describes any TypeScript codebase in a report whose format it defines and documents
+here. It MUST NOT take the shape of any one consumer's file: each consumer translates the report
+into its own format. What differs between codebases (what counts as an entry, what counts as an
+error answer) is supplied per codebase, never built in for one of them. A change to the report's
+format is a versioned change of the reader, announced to its consumers.
+
+Rationale: a tool shaped to its first consumer has to change its output under that consumer to
+serve a second one; a tool that owns its format serves each through the consumer's own
+translation.
 
 ## Scope and Constraints
 
 - A standalone command-line tool: it reads a codebase on disk and writes a file. It calls no
   service and holds no secrets.
-- It is built against its first consumer's real code; growth toward other codebases is decided
-  per feature.
+- It applies to any TypeScript codebase. Each version is proven on a real consumer's code before
+  it is handed over, the first consumer first.
 
 ## Development Workflow
 
@@ -66,4 +72,4 @@ owner, and versioned: MAJOR for removing or redefining a principle, MINOR for ad
 or materially expanding guidance, PATCH for wording. Runtime guidance for agents lives in
 `CLAUDE.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-11 | **Last Amended**: 2026-11-11
+**Version**: 2.0.0 | **Ratified**: 2026-11-11 | **Last Amended**: 2026-11-11
