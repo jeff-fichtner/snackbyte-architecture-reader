@@ -1,0 +1,19 @@
+# ClickUp plug — repo-level config (committed, consumer-owned; survives
+# `specify extension update`). The plug finds the containers by ID; no
+# credentials live here. Each feature's specs/<feature>/.clickup-sync.json
+# manifest records the IDs it synced against. Machine-local overrides go in
+# local-config.yml (gitignored).
+workspace-id: "90141363864"   # snackbyte
+space-id: "90149548887"       # tools
+folder-id: "901415211321"     # architecture-reader
+list-id: "901423218591"       # Roadmap
+# Six-state lifecycle → this list's real status names (read from the tools
+# space on 2026-11-11; the space also carries "scoping", "testing" and
+# "cancelled", which the lifecycle does not drive).
+statuses:
+  open: "backlog"
+  in-design: "in design"
+  ready: "ready for development"
+  in-development: "in development"
+  in-review: "in review"
+  done: "shipped"

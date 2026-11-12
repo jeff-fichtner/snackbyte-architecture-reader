@@ -1,0 +1,10 @@
+# Installed and generated
+node_modules/
+dist/
+.DS_Store
+
+# Spec Kit scaffolding: generated or machine-local, never committed
+.specify/extensions/*/.specify-dev/
+.specify/extensions/*/local-config.yml
+.claude/settings.local.json
+specs/**/*.html
