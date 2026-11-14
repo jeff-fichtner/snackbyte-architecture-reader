@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { reportOf } from '../report-of.js';
 
 describe('entries', () => {
-  const { report, trips } = reportOf('entries');
+  const { report, part, trips } = reportOf('entries');
   const A = 'src/app.ts';
+  const H = 'src/handed.ts';
   const ruleOf = (entry: string) => report.trips.find((t) => t.entry === entry)?.rule;
 
   it('finds an inline handler by the type the router expects for it', () => {
@@ -33,6 +34,33 @@ describe('entries', () => {
   it('starts trips at a function used as a value the compiler cannot follow', () => {
     expect(ruleOf(`${A}#stored`)).toBe('value');
     expect(ruleOf(`${A}#table.stored`)).toBe('value');
+  });
+
+  it('names the part that hands a value on: the function holding the place, or the file', () => {
+    expect(part(`${A}#stored`).handedOnBy).toEqual([`${A}#createApp`]);
+    expect(part(`${A}#table.stored`).handedOnBy).toEqual([A]);
+  });
+
+  it('names the caller that hands a callback to codebase code, as the place it starts from', () => {
+    expect(ruleOf(`${H}#save/1`)).toBe('value');
+    expect(part(`${H}#save/1`).handedOnBy).toEqual([`${H}#save`]);
+  });
+
+  it('names every part that hands a function on, sorted, each once', () => {
+    expect(part(`${H}#later`).handedOnBy).toEqual([`${H}#retry`, `${H}#save`]);
+  });
+
+  it('names the function that returns an object holding a method', () => {
+    expect(part(`${H}#hooks.run`).handedOnBy).toEqual([`${H}#hooks`]);
+  });
+
+  it('gives no such list to a function that is not a value entry', () => {
+    for (const id of [`${A}#createApp`, `${A}#named`, `${A}#createApp/2`, `${A}#mw/1`]) {
+      expect(part(id).handedOnBy).toBeUndefined();
+    }
+    const values = new Set(report.trips.filter((t) => t.rule === 'value').map((t) => t.entry));
+    const listed = report.parts.filter((p) => p.handedOnBy).map((p) => p.id);
+    expect(new Set(listed)).toEqual(values);
   });
 
   it('stops when one function is matched by two rules', () => {

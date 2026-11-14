@@ -1,8 +1,8 @@
 import ts from 'typescript';
-import type { Codebase } from './codebase.js';
+import type { Codebase, CodebaseFile } from './codebase.js';
 import type { DeclarationMatcher } from './declarations.js';
 import { StopError } from './errors.js';
-import { unwrap, type Part, type PartIndex } from './parts.js';
+import { owningPart, unwrap, type Part, type PartIndex } from './parts.js';
 import type { Resolver } from './relationships.js';
 import { VALUE_RULE, type EntryRule, type TypeEntryRule } from './settings.js';
 
@@ -11,6 +11,8 @@ export interface EntryIndex {
   entries: Map<Part, string>;
   /** Functions handed to outside code at a call, which run as steps at that call. */
   handedOver: Map<ts.Node, Part[]>;
+  /** For each entry under the rule `value`, the parts whose code hands it on as a value. */
+  handedOnBy: Map<Part, Set<Part>>;
 }
 
 function isFunctionPart(part: Part | undefined): part is Part {
@@ -69,6 +71,8 @@ function inTypePosition(node: ts.Node): boolean {
  * used as a value any other way (stored, or handed to codebase code that calls it through a
  * parameter) is called where the compiler cannot follow, so it starts trips of its own under the
  * rule `value`. Every function that escapes as a value is accounted for, so no path can disappear.
+ * Each such function also records the parts whose code hands it on: the innermost function or method
+ * holding each place it is used as a value, or the file for top-level code.
  */
 export function collectEntries(
   codebase: Codebase,
@@ -78,7 +82,7 @@ export function collectEntries(
   rules: EntryRule[],
 ): EntryIndex {
   const entries = new Map<Part, string>();
-  const valueParts = new Set<Part>();
+  const valueParts = new Map<Part, Set<Part>>();
   const handedOver = new Map<ts.Node, Part[]>();
   const typeRules = rules.filter((r): r is TypeEntryRule => 'type' in r);
   const matchedRules = new Set<string>();
@@ -113,20 +117,25 @@ export function collectEntries(
     const { checker } = file;
     const visit = (node: ts.Node): void => {
       const use = functionUse(node, checker);
-      if (use) consider(use.part, use.at, use.candidates, checker);
+      if (use) consider(use.part, use.at, use.candidates, file);
       ts.forEachChild(node, visit);
     };
     visit(file.sourceFile);
   }
 
-  for (const part of valueParts) if (!entries.has(part)) entries.set(part, VALUE_RULE);
+  const handedOnBy = new Map<Part, Set<Part>>();
+  for (const [part, holders] of valueParts) {
+    if (entries.has(part)) continue;
+    entries.set(part, VALUE_RULE);
+    handedOnBy.set(part, holders);
+  }
 
   rules.forEach((rule, i) => {
     if (!matchedRules.has(rule.name)) {
       throw new StopError(`entries[${i}] "${rule.name}" matches no function`);
     }
   });
-  return { entries, handedOver };
+  return { entries, handedOver, handedOnBy };
 
   /** A place where a codebase function is used as a value, and the declarations its type there comes from. */
   function functionUse(
@@ -169,7 +178,8 @@ export function collectEntries(
     return { part, at, candidates };
   }
 
-  function consider(part: Part, at: ts.Node, candidates: ts.Node[], checker: ts.TypeChecker): void {
+  function consider(part: Part, at: ts.Node, candidates: ts.Node[], file: CodebaseFile): void {
+    const { checker } = file;
     const matching = typeRules.filter((rule) =>
       candidates.some((declaration) => matcher.matches(declaration, rule.type, rule.within)),
     );
@@ -182,7 +192,9 @@ export function collectEntries(
       handedOver.set(call, list);
       return;
     }
-    valueParts.add(part);
+    const holders = valueParts.get(part) ?? new Set<Part>();
+    holders.add(owningPart(at, index, file));
+    valueParts.set(part, holders);
   }
 
   /** The call a value is an argument of, directly or inside object and array literals. */

@@ -26,12 +26,14 @@ export function read(settingsFile: string): string {
   const report: Report = {
     parts: index.parts.map((part) => {
       const checkpoint = refusals.checkpoints.get(part);
+      const handedOnBy = entries.handedOnBy.get(part);
       return {
         id: part.id,
         kind: part.kind,
         rel: rel.get(part) ?? [],
         refuses: refusals.refuses.get(part) ?? [],
         ...(checkpoint ? { checkpoint } : {}),
+        ...(handedOnBy ? { handedOnBy: [...handedOnBy].map((p) => p.id) } : {}),
       };
     }),
     trips,

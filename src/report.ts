@@ -17,6 +17,8 @@ export interface ReportPart {
   rel: Relationship[];
   refuses: Refusal[];
   checkpoint?: { what: string };
+  /** On a function that starts trips under the rule `value`: the parts that hand it on. */
+  handedOnBy?: string[];
 }
 
 export interface Trip {
@@ -31,7 +33,7 @@ export interface Report {
 }
 
 /** The report format's version. A consumer refuses a format it does not know. */
-export const FORMAT = 1;
+export const FORMAT = 2;
 
 /** Plain code-unit order: the same on every machine and in every locale. */
 export function compare(a: string, b: string): number {
@@ -73,6 +75,9 @@ export function serialize(report: Report): string {
       if (rel.length > 0) out.rel = rel.map((r) => ({ to: r.to, kind: r.kind }));
       if (part.refuses.length > 0) out.refuses = part.refuses.map((r) => ({ what: r.what }));
       if (part.checkpoint) out.checkpoint = { what: part.checkpoint.what };
+      if (part.handedOnBy && part.handedOnBy.length > 0) {
+        out.handedOnBy = [...new Set(part.handedOnBy)].sort(compare);
+      }
       return out;
     });
   const trips = [...report.trips]

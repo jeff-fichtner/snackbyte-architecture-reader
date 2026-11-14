@@ -1,4 +1,4 @@
-# The report, format 1
+# The report, format 2
 
 What the reader writes. A consumer reads it and translates it into its own file; nothing in it is
 shaped for one consumer. The same code, settings and reader version always give the same bytes.
@@ -13,7 +13,7 @@ the same on every machine and in every locale.
 
 ```json
 {
-  "format": 1,
+  "format": 2,
   "parts": [],
   "trips": []
 }
@@ -21,7 +21,7 @@ the same on every machine and in every locale.
 
 | Field    | Meaning                                                                     |
 | -------- | --------------------------------------------------------------------------- |
-| `format` | `1`. A consumer refuses a format it does not know.                          |
+| `format` | `2`. A consumer refuses a format it does not know.                          |
 | `parts`  | Every part of the codebase, sorted by `id`.                                 |
 | `trips`  | Every trip, sorted by `entry`, then by `steps` compared element by element. |
 
@@ -33,7 +33,8 @@ the same on every machine and in every locale.
   "kind": "function",
   "rel": [{ "to": "src/store.ts#Store.open", "kind": "calls" }],
   "refuses": [{ "what": "not signed in" }],
-  "checkpoint": { "what": "the session cookie is signed and current" }
+  "checkpoint": { "what": "the session cookie is signed and current" },
+  "handedOnBy": ["src/app.ts#createApp"]
 }
 ```
 
@@ -93,6 +94,18 @@ source order: every `throw`, and every call an error-answer rule of the settings
 `{ what }`: the words of the part's `@checkpoint` doc-comment tag, whitespace collapsed. Normally on
 a function or method; a tag anywhere else, or with no words, is reported as written, so a consumer
 can refuse it.
+
+### `handedOnBy`
+
+On a function that starts trips with the rule `value` (see [Entries](#entries)), and on no other
+part: the ids of the parts whose code hands it on, sorted, each once. For each place the function is
+used as a value, that is the innermost function or method holding the place, or the file for
+top-level code, the same part a `calls` relationship would come from. A callback written in place as
+an argument, `run(() => …)`, is handed on by the function holding that call; a function written in
+an object literal is handed on by the function holding the literal, whoever later calls it.
+
+A consumer can start such a function's trips where the paths of the parts that hand it on stood,
+rather than from raw input.
 
 ## A trip
 
