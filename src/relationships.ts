@@ -82,12 +82,14 @@ function isImportCall(node: ts.Node): node is ts.CallExpression {
 
 /**
  * Every part's relationships: `imports` file to file, `calls` from the innermost function, method
- * or file holding the call, and `implements` / `extends` from a class or interface.
+ * or file holding the call (including a call through a parameter that reaches exactly one codebase
+ * function), and `implements` / `extends` from a class or interface.
  */
 export function collectRelationships(
   codebase: Codebase,
   index: PartIndex,
   resolver: Resolver,
+  boundCalls: ReadonlyMap<ts.CallExpression, Part>,
 ): Map<Part, Relationship[]> {
   const rel = new Map<Part, Relationship[]>();
   const add = (from: Part, to: string | undefined, kind: Relationship['kind']): void => {
@@ -112,7 +114,9 @@ export function collectRelationships(
       } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) {
         add(filePart, idOf(resolver.module(node.argument.literal, checker)), 'imports');
       } else if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
-        add(owningPart(node, index, file), idOf(resolver.callee(node, checker)), 'calls');
+        const bound = ts.isCallExpression(node) ? boundCalls.get(node) : undefined;
+        const to = idOf(resolver.callee(node, checker)) ?? bound?.id;
+        add(owningPart(node, index, file), to, 'calls');
       } else if (ts.isClassLike(node) || ts.isInterfaceDeclaration(node)) {
         heritage(node, file);
       }

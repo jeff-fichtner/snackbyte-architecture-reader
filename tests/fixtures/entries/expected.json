@@ -63,7 +63,13 @@
     },
     {
       "id": "src/app.ts#register",
-      "kind": "function"
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/app.ts#stored",
+          "kind": "calls"
+        }
+      ]
     },
     {
       "id": "src/app.ts#stored",
@@ -73,9 +79,6 @@
           "to": "src/app.ts#table.stored",
           "kind": "calls"
         }
-      ],
-      "handedOnBy": [
-        "src/app.ts#createApp"
       ]
     },
     {
@@ -184,7 +187,9 @@
         "src/app.ts#createApp",
         "src/app.ts#createApp/2",
         "src/audit.ts#audit",
-        "src/app.ts#register"
+        "src/app.ts#register",
+        "src/app.ts#stored",
+        "src/app.ts#table.stored"
       ]
     },
     {
@@ -221,15 +226,6 @@
       "rule": "route",
       "steps": [
         "src/app.ts#named"
-      ]
-    },
-    {
-      "entry": "src/app.ts#stored",
-      "rule": "value",
-      "steps": [
-        "src/app.ts#stored",
-        "src/app.ts#table.stored",
-        "src/audit.ts#audit"
       ]
     },
     {
