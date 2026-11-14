@@ -42,7 +42,7 @@ function append(prefix: readonly string[], suffix: readonly string[]): readonly 
  * Every distinct path from every entry, one trip each. A function is walked as control flow: a branch
  * divides the path, a loop body is walked taken once and not taken, `return` and an uncaught `throw`
  * end it, an error answer ends the trip. At each call into the codebase, the callee is walked in
- * place; a tagged template calls its tag. A part already on the call stack is not walked again, which ends recursion.
+ * place. A part already on the call stack is not walked again, which ends recursion.
  */
 export function collectTrips(
   index: PartIndex,
@@ -385,6 +385,7 @@ export function collectTrips(
     return children(node, part, stack);
   }
 
+  /** A call, a `new`, or a tagged template, which calls its tag after its substitutions. */
   function call(node: CallLike, part: Part, stack: Part[]): Outcome[] {
     const callee = calleeOf(node);
     let outcomes: Outcome[] =
