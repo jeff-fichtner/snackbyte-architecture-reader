@@ -9,7 +9,9 @@ code first (Jeff, 2026-11-11).
 
 Tracked files never name another repository: not in code, docs, specs, tests or commit messages
 (Jeff, 2026-11-11). Say "the first consumer". The names, the contract's location and how to
-reach the consumer are in `CLAUDE.local.md`, which is never committed.
+reach the consumer are in `CLAUDE.local.md`, which is never committed. One exception: a workflow's
+`uses:` of a public action or tool, and its Dependabot entry, name what the repository's own
+workflows run (Jeff, 2026-11-14). The consumer is still never named.
 
 Decided (Jeff, 2026-11-10):
 - Repo `snackbyte-architecture-reader`. A descriptive name: only developers see it.
