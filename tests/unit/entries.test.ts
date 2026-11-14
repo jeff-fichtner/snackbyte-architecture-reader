@@ -27,26 +27,36 @@ describe('entries', () => {
   it('walks a callback handed to outside code as a step where it is handed over', () => {
     expect(ruleOf(`${A}#createApp/2`)).toBeUndefined();
     expect(trips(`${A}#createApp`)).toEqual([
-      [`${A}#createApp`, `${A}#createApp/2`, 'src/audit.ts#audit', `${A}#register`],
+      [
+        `${A}#createApp`,
+        `${A}#createApp/2`,
+        'src/audit.ts#audit',
+        `${A}#register`,
+        `${A}#stored`,
+        `${A}#table.stored`,
+      ],
     ]);
   });
 
   it('starts trips at a function used as a value the compiler cannot follow', () => {
-    expect(ruleOf(`${A}#stored`)).toBe('value');
     expect(ruleOf(`${A}#table.stored`)).toBe('value');
   });
 
+  it('walks a function handed to a parameter where the parameter is called', () => {
+    expect(ruleOf(`${A}#stored`)).toBeUndefined();
+  });
+
   it('names the part that hands a value on: the function holding the place, or the file', () => {
-    expect(part(`${A}#stored`).handedOnBy).toEqual([`${A}#createApp`]);
     expect(part(`${A}#table.stored`).handedOnBy).toEqual([A]);
   });
 
-  it('names the caller that hands a callback to codebase code, as the place it starts from', () => {
+  it('names the caller that hands a callback to a parameter holding more than one', () => {
     expect(ruleOf(`${H}#save/1`)).toBe('value');
     expect(part(`${H}#save/1`).handedOnBy).toEqual([`${H}#save`]);
   });
 
   it('names every part that hands a function on, sorted, each once', () => {
+    // inTransaction's parameter holds save/1 and later, so neither call through it resolves.
     expect(part(`${H}#later`).handedOnBy).toEqual([`${H}#retry`, `${H}#save`]);
   });
 

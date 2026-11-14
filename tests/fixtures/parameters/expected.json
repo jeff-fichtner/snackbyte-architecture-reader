@@ -1,0 +1,385 @@
+{
+  "format": 2,
+  "parts": [
+    {
+      "id": "src/app.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/app.ts#Deps",
+      "kind": "type"
+    },
+    {
+      "id": "src/app.ts#createApp",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/app.ts#routes",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/app.ts#createApp/1",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#engine",
+          "kind": "calls"
+        },
+        {
+          "to": "src/main.ts#main.resolve",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/app.ts#createApp"
+      ]
+    },
+    {
+      "id": "src/app.ts#routes",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#main.mount.log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/edges.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/edges.ts#Box",
+      "kind": "class"
+    },
+    {
+      "id": "src/edges.ts#Box.take",
+      "kind": "method"
+    },
+    {
+      "id": "src/edges.ts#edges",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/edges.ts#Box",
+          "kind": "calls"
+        },
+        {
+          "to": "src/edges.ts#Box.take",
+          "kind": "calls"
+        },
+        {
+          "to": "src/edges.ts#outward",
+          "kind": "calls"
+        },
+        {
+          "to": "src/edges.ts#withDefault",
+          "kind": "calls"
+        },
+        {
+          "to": "src/edges.ts#withSpread",
+          "kind": "calls"
+        },
+        {
+          "to": "src/edges.ts#written",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/edges.ts#extra",
+      "kind": "variable"
+    },
+    {
+      "id": "src/edges.ts#g1",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#edges"
+      ]
+    },
+    {
+      "id": "src/edges.ts#g2",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#edges"
+      ]
+    },
+    {
+      "id": "src/edges.ts#g3",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#edges"
+      ]
+    },
+    {
+      "id": "src/edges.ts#g4",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#edges"
+      ]
+    },
+    {
+      "id": "src/edges.ts#g5",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#withDefault"
+      ]
+    },
+    {
+      "id": "src/edges.ts#noop",
+      "kind": "function",
+      "handedOnBy": [
+        "src/edges.ts#written"
+      ]
+    },
+    {
+      "id": "src/edges.ts#outward",
+      "kind": "function"
+    },
+    {
+      "id": "src/edges.ts#withDefault",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/edges.ts#g5",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/edges.ts#withSpread",
+      "kind": "function"
+    },
+    {
+      "id": "src/edges.ts#written",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/app.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#destructured",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#ran",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#engine",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts#keep",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts#kept",
+      "kind": "function",
+      "handedOnBy": [
+        "src/main.ts#main"
+      ]
+    },
+    {
+      "id": "src/main.ts#lookup",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts#main",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/app.ts#createApp",
+          "kind": "calls"
+        },
+        {
+          "to": "src/main.ts#destructured",
+          "kind": "calls"
+        },
+        {
+          "to": "src/main.ts#keep",
+          "kind": "calls"
+        },
+        {
+          "to": "src/main.ts#twice",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#main.mount.log",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#note",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#main.resolve",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#lookup",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/main.ts#main/1",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#note",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/main.ts#main"
+      ]
+    },
+    {
+      "id": "src/main.ts#main/2",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/main.ts#note",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/main.ts#main"
+      ]
+    },
+    {
+      "id": "src/main.ts#note",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts#ran",
+      "kind": "function"
+    },
+    {
+      "id": "src/main.ts#twice",
+      "kind": "function"
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/app.ts#createApp/1",
+      "rule": "value",
+      "steps": [
+        "src/app.ts#createApp/1",
+        "src/main.ts#main.resolve",
+        "src/main.ts#lookup",
+        "src/main.ts#engine"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#edges",
+      "rule": "job",
+      "steps": [
+        "src/edges.ts#edges",
+        "src/edges.ts#withSpread",
+        "src/edges.ts#written",
+        "src/edges.ts#Box",
+        "src/edges.ts#Box.take",
+        "src/edges.ts#withDefault",
+        "src/edges.ts#g5",
+        "src/edges.ts#outward"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#g1",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#g1"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#g2",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#g2"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#g3",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#g3"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#g4",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#g4"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#g5",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#g5"
+      ]
+    },
+    {
+      "entry": "src/edges.ts#noop",
+      "rule": "value",
+      "steps": [
+        "src/edges.ts#noop"
+      ]
+    },
+    {
+      "entry": "src/main.ts#kept",
+      "rule": "value",
+      "steps": [
+        "src/main.ts#kept"
+      ]
+    },
+    {
+      "entry": "src/main.ts#main",
+      "rule": "job",
+      "steps": [
+        "src/main.ts#main",
+        "src/app.ts#createApp",
+        "src/app.ts#routes",
+        "src/main.ts#main.mount.log",
+        "src/main.ts#note",
+        "src/main.ts#twice",
+        "src/main.ts#keep",
+        "src/main.ts#destructured",
+        "src/main.ts#ran"
+      ]
+    },
+    {
+      "entry": "src/main.ts#main/1",
+      "rule": "value",
+      "steps": [
+        "src/main.ts#main/1",
+        "src/main.ts#note"
+      ]
+    },
+    {
+      "entry": "src/main.ts#main/2",
+      "rule": "value",
+      "steps": [
+        "src/main.ts#main/2",
+        "src/main.ts#note"
+      ]
+    }
+  ]
+}

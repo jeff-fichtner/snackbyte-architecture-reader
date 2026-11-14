@@ -199,7 +199,9 @@ export function collectTrips(
   function callTarget(call: ts.CallExpression | ts.NewExpression, from: Part): Part | undefined {
     if (ts.isCallExpression(call) && call.expression.kind === ts.SyntaxKind.ImportKeyword)
       return undefined;
-    const target = resolver.callee(call, from.file.checker).part;
+    const target =
+      resolver.callee(call, from.file.checker).part ??
+      (ts.isCallExpression(call) ? entries.boundCalls.get(call) : undefined);
     return target && target.kind !== 'file' ? target : undefined;
   }
 

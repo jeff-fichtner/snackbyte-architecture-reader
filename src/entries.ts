@@ -1,9 +1,17 @@
 import ts from 'typescript';
 import type { Codebase, CodebaseFile } from './codebase.js';
 import type { DeclarationMatcher } from './declarations.js';
+import { collectBindings } from './bindings.js';
 import { StopError } from './errors.js';
 import { owningPart, unwrap, type Part, type PartIndex } from './parts.js';
 import type { Resolver } from './relationships.js';
+import {
+  inTypePosition,
+  isCallee,
+  isDeclarationName,
+  isFunctionPart,
+  outermost,
+} from './syntax.js';
 import { VALUE_RULE, type EntryRule, type TypeEntryRule } from './settings.js';
 
 export interface EntryIndex {
@@ -13,53 +21,8 @@ export interface EntryIndex {
   handedOver: Map<ts.Node, Part[]>;
   /** For each entry under the rule `value`, the parts whose code hands it on as a value. */
   handedOnBy: Map<Part, Set<Part>>;
-}
-
-function isFunctionPart(part: Part | undefined): part is Part {
-  return part !== undefined && (part.kind === 'function' || part.kind === 'method') && !!part.fn;
-}
-
-/** The expression whose position decides how a function value is used. */
-function outermost(node: ts.Node): ts.Node {
-  let n = node;
-  while (
-    n.parent &&
-    (ts.isParenthesizedExpression(n.parent) ||
-      ts.isAsExpression(n.parent) ||
-      ts.isSatisfiesExpression(n.parent) ||
-      ts.isNonNullExpression(n.parent) ||
-      ts.isTypeAssertionExpression(n.parent))
-  ) {
-    n = n.parent;
-  }
-  return n;
-}
-
-function isCallee(node: ts.Node): boolean {
-  const n = outermost(node);
-  const parent = n.parent;
-  return (
-    !!parent &&
-    (ts.isCallExpression(parent) || ts.isNewExpression(parent)) &&
-    parent.expression === n
-  );
-}
-
-/** Whether an identifier or property name is a declaration's own name rather than a use of it. */
-function isDeclarationName(node: ts.Node): boolean {
-  const parent = node.parent;
-  if (!parent) return false;
-  if (ts.isPropertyAccessExpression(parent) || ts.isQualifiedName(parent)) return false;
-  return (parent as ts.Node & { name?: ts.Node }).name === node;
-}
-
-function inTypePosition(node: ts.Node): boolean {
-  for (let n: ts.Node | undefined = node.parent; n; n = n.parent) {
-    if (ts.isTypeNode(n) && !ts.isExpressionWithTypeArguments(n)) return true;
-    if (ts.isImportSpecifier(n) || ts.isExportSpecifier(n) || ts.isImportClause(n)) return true;
-    if (ts.isStatement(n) || ts.isSourceFile(n)) return false;
-  }
-  return false;
+  /** Calls through a parameter that reach exactly one codebase function, and that function. */
+  boundCalls: Map<ts.CallExpression, Part>;
 }
 
 /**
@@ -113,15 +76,33 @@ export function collectEntries(
     }
   });
 
+  const uses: { part: Part; at: ts.Node; candidates: ts.Node[]; file: CodebaseFile }[] = [];
   for (const file of codebase.files) {
     const { checker } = file;
     const visit = (node: ts.Node): void => {
       const use = functionUse(node, checker);
-      if (use) consider(use.part, use.at, use.candidates, file);
+      if (use) uses.push({ ...use, file });
       ts.forEachChild(node, visit);
     };
     visit(file.sourceFile);
   }
+
+  // A function used as a value anywhere, or named by a rule, can be called with arguments the reader
+  // does not see, so only the others have parameters whose values are known.
+  const escaping = new Set<Part>([...entries.keys(), ...uses.map((u) => u.part)]);
+  const bindings = collectBindings(
+    codebase,
+    index,
+    resolver,
+    (part) =>
+      part.kind === 'function' &&
+      !escaping.has(part) &&
+      !!part.fn &&
+      (ts.isFunctionDeclaration(part.fn) ||
+        ts.isArrowFunction(part.fn) ||
+        ts.isFunctionExpression(part.fn)),
+  );
+  for (const use of uses) consider(use.part, use.at, use.candidates, use.file);
 
   const handedOnBy = new Map<Part, Set<Part>>();
   for (const [part, holders] of valueParts) {
@@ -135,7 +116,7 @@ export function collectEntries(
       throw new StopError(`entries[${i}] "${rule.name}" matches no function`);
     }
   });
-  return { entries, handedOver, handedOnBy };
+  return { entries, handedOver, handedOnBy, boundCalls: bindings.calls };
 
   /** A place where a codebase function is used as a value, and the declarations its type there comes from. */
   function functionUse(
@@ -192,6 +173,7 @@ export function collectEntries(
       handedOver.set(call, list);
       return;
     }
+    if (call && bindings.traced(part, call)) return;
     const holders = valueParts.get(part) ?? new Set<Part>();
     holders.add(owningPart(at, index, file));
     valueParts.set(part, holders);

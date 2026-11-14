@@ -18,9 +18,9 @@ export function read(settingsFile: string): string {
   const resolver = new Resolver(codebase, index, new Set(settings.keep));
   const matcher = new DeclarationMatcher(codebase, programs);
 
-  const rel = collectRelationships(codebase, index, resolver);
-  const refusals = collectRefusals(codebase, index, resolver, matcher, settings.errorAnswers);
   const entries = collectEntries(codebase, index, resolver, matcher, settings.entries);
+  const rel = collectRelationships(codebase, index, resolver, entries.boundCalls);
+  const refusals = collectRefusals(codebase, index, resolver, matcher, settings.errorAnswers);
   const trips = collectTrips(index, entries, refusals, resolver, settings.pathLimit);
 
   const report: Report = {

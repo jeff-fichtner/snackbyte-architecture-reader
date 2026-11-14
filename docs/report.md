@@ -71,8 +71,10 @@ Positions count unnamed functions, not lines, so an id holds while lines elsewhe
   and `import("…")` types.
 - `calls`: from the innermost function or method holding the call (or the file, for top-level code)
   to the function, method or class the compiler resolves it to. `new X()` calls `X`'s constructor,
-  or `X` when it has none. A call through an interface or a function-typed value names no part and
-  is left out.
+  or `X` when it has none. A call through a parameter goes to the one function the parameter holds
+  there, when it holds exactly one (see
+  [Functions passed through parameters](#functions-passed-through-parameters)); any other call
+  through an interface or a function-typed value names no part and is left out.
 - `implements` / `extends`: from a class or interface to what its heritage clauses name.
 
 `to` is a part id, or `pkg:<name>` for a package the settings keep. Targets in any other package
@@ -136,10 +138,40 @@ recursion. Paths that reach the same parts in the same order are one trip.
 - A function an entry rule of the settings matches.
 - A function handed to code outside the codebase (a callback given to a package or a built-in) is
   not an entry: it is a step of the path where it is handed over, and its own steps follow there.
-- A function used as a value in any other way (stored, returned, written in an object literal, or
-  handed to codebase code that calls it through a parameter) is called where the compiler cannot
-  follow, so it starts trips of its own, with the rule `value`. Every function that escapes as a
-  value is accounted for this way, so no path can disappear.
+- A function passed into a parameter of a codebase function, and reached only through calls the
+  reader resolves (below), is not an entry: it is a step of each path that calls it.
+- A function used as a value in any other way (stored, returned, written in an object literal that
+  is not passed straight into a parameter, or passed into a parameter the reader cannot resolve) is
+  called where the compiler cannot follow, so it starts trips of its own, with the rule `value`.
+  Every function that escapes as a value is accounted for this way, so no path can disappear.
+
+### Functions passed through parameters
+
+The reader follows a function from where it is passed to where it is called.
+
+- A function passed as an argument to a codebase function, or as a property of an object literal
+  passed as one (`createApp({ engine, mount: { log } })`), is held by that parameter at that
+  property path (`engine`, `mount.log`). A function's parameter default counts the same way.
+- A parameter passed on to another codebase function, whole or by a property path (`routes(deps)`,
+  `routes(deps.mount)`), carries what it holds to that function's parameter. A name destructured
+  from a parameter (`({ run }) => run()`) stands for that property path.
+- A call through a parameter (`deps.engine(…)`), in the function or in any function written inside
+  it, goes to the function the parameter holds at that path when, across every call that passes
+  the parameter, it can hold only that one function there. Two different functions there, or
+  anything the reader cannot follow, and the call names no part.
+- A parameter's values are known only for a function written as a function (not a method or a
+  constructor) that is called only where the compiler resolves the call to it: never used as a value,
+  and not matched by an entry rule. Any other can be called with arguments the reader does not see.
+  Only calls in the codebase are seen: a function also called from outside the codebase can receive
+  other values there.
+- What can reach a parameter's value unseen leaves it unknown: an object spread into the literal, a
+  computed property name, an argument the reader cannot follow, a property written over, an index by
+  a variable, a default in a destructured name. A function so passed is still followed where its
+  calls resolve, but it also starts trips as a `value`.
+- A function passed into a parameter stops being a `value` entry only when every place it is used as
+  a value passes it into a parameter, every call through those parameters at that path resolves to
+  it alone, and nothing reads the property path that holds it in any other way (returns it, stores
+  it, hands it to code outside the codebase, takes it through a rest element or an array pattern).
 
 ### The path limit
 
