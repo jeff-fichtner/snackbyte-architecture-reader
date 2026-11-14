@@ -20,8 +20,9 @@ The settings file lives in the codebase being read and says which TypeScript pro
 what counts as an entry into the code (a route handler, a hook handed to an engine, a scheduled
 job) and what counts as an error answer. See [docs/settings.md](docs/settings.md).
 
-The report is one JSON document: every part with its relationships, refusals and checkpoint, and one
-trip per distinct path from every entry. See [docs/report.md](docs/report.md). A consumer translates
+The report is one JSON document: every part with its relationships, refusals and checkpoint (and,
+for a function that starts trips of its own as a value, the parts that hand it on), and one trip per
+distinct path from every entry. See [docs/report.md](docs/report.md). A consumer translates
 it into whatever file it draws from.
 
 | Exit | Meaning                                                              |

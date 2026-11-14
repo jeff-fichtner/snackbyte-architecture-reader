@@ -1,5 +1,5 @@
 {
-  "format": 1,
+  "format": 2,
   "parts": [
     {
       "id": "src/app.ts",
@@ -73,6 +73,9 @@
           "to": "src/app.ts#table.stored",
           "kind": "calls"
         }
+      ],
+      "handedOnBy": [
+        "src/app.ts#createApp"
       ]
     },
     {
@@ -87,6 +90,9 @@
           "to": "src/audit.ts#audit",
           "kind": "calls"
         }
+      ],
+      "handedOnBy": [
+        "src/app.ts"
       ]
     },
     {
@@ -96,6 +102,78 @@
     {
       "id": "src/audit.ts#audit",
       "kind": "function"
+    },
+    {
+      "id": "src/handed.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/audit.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/handed.ts#hooks",
+      "kind": "function"
+    },
+    {
+      "id": "src/handed.ts#hooks.run",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/audit.ts#audit",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/handed.ts#hooks"
+      ]
+    },
+    {
+      "id": "src/handed.ts#inTransaction",
+      "kind": "function"
+    },
+    {
+      "id": "src/handed.ts#later",
+      "kind": "function",
+      "handedOnBy": [
+        "src/handed.ts#retry",
+        "src/handed.ts#save"
+      ]
+    },
+    {
+      "id": "src/handed.ts#retry",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/handed.ts#inTransaction",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/handed.ts#save",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/handed.ts#inTransaction",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/handed.ts#save/1",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/audit.ts#audit",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/handed.ts#save"
+      ]
     }
   ],
   "trips": [
@@ -159,6 +237,29 @@
       "rule": "value",
       "steps": [
         "src/app.ts#table.stored",
+        "src/audit.ts#audit"
+      ]
+    },
+    {
+      "entry": "src/handed.ts#hooks.run",
+      "rule": "value",
+      "steps": [
+        "src/handed.ts#hooks.run",
+        "src/audit.ts#audit"
+      ]
+    },
+    {
+      "entry": "src/handed.ts#later",
+      "rule": "value",
+      "steps": [
+        "src/handed.ts#later"
+      ]
+    },
+    {
+      "entry": "src/handed.ts#save/1",
+      "rule": "value",
+      "steps": [
+        "src/handed.ts#save/1",
         "src/audit.ts#audit"
       ]
     }

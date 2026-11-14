@@ -20,6 +20,7 @@ const report: Report = {
       rel: [],
       refuses: [{ what: 'second' }, { what: 'first' }],
       checkpoint: { what: 'the session is signed' },
+      handedOnBy: ['src/b.ts', 'src/a.ts#a', 'src/a.ts#a'],
     },
   ],
   trips: [
@@ -35,8 +36,14 @@ describe('the report', () => {
 
   it('puts keys in the documented order and leaves out empty optional fields', () => {
     expect(Object.keys(parsed)).toEqual(['format', 'parts', 'trips']);
-    expect(parsed.format).toBe(1);
-    expect(Object.keys(parsed.parts[0])).toEqual(['id', 'kind', 'refuses', 'checkpoint']);
+    expect(parsed.format).toBe(2);
+    expect(Object.keys(parsed.parts[0])).toEqual([
+      'id',
+      'kind',
+      'refuses',
+      'checkpoint',
+      'handedOnBy',
+    ]);
     expect(Object.keys(parsed.parts[1])).toEqual(['id', 'kind', 'rel']);
     expect(Object.keys(parsed.trips[0])).toEqual(['entry', 'rule', 'steps']);
   });
@@ -48,6 +55,10 @@ describe('the report', () => {
       { to: 'src/z.ts#z', kind: 'calls' },
       { to: 'src/a.ts', kind: 'imports' },
     ]);
+  });
+
+  it('sorts the parts that hand a function on, each once', () => {
+    expect(parsed.parts[0].handedOnBy).toEqual(['src/a.ts#a', 'src/b.ts']);
   });
 
   it('keeps refusals in the order given, which is source order', () => {
@@ -63,7 +74,7 @@ describe('the report', () => {
   });
 
   it('is two-space indented with LF and one final newline, and the same bytes every time', () => {
-    expect(text).toContain('\n  "format": 1,\n');
+    expect(text).toContain('\n  "format": 2,\n');
     expect(text).not.toContain('\r');
     expect(text.endsWith('}\n')).toBe(true);
     expect(text.endsWith('\n\n')).toBe(false);

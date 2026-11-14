@@ -7,6 +7,7 @@ export interface ParsedPart {
   rel?: { to: string; kind: string }[];
   refuses?: { what: string }[];
   checkpoint?: { what: string };
+  handedOnBy?: string[];
 }
 
 export interface ParsedTrip {
