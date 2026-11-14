@@ -1,6 +1,6 @@
 {
   "name": "snackbyte-architecture-reader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reads a TypeScript codebase with the compiler and reports, deterministically, how its parts relate, where each function turns a request away, and every path from each entry into the code.",
   "type": "module",
   "license": "MIT",
@@ -11,7 +11,8 @@
     "architecture-reader": "dist/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "docs"
   ],
   "scripts": {
     "prepack": "npm run build",
