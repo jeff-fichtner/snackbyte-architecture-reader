@@ -37,7 +37,7 @@ Each release carries the packed package, built, as an asset of its GitHub releas
 exact version from it; npm records the tarball's integrity, so `npm ci` installs the same bytes:
 
 ```text
-npm install --save-dev https://github.com/jeff-fichtner/snackbyte-architecture-reader/releases/download/v0.2.0/snackbyte-architecture-reader-0.2.0.tgz
+npm install --save-dev https://github.com/jeff-fichtner/snackbyte-architecture-reader/releases/download/v0.3.0/snackbyte-architecture-reader-0.3.0.tgz
 ```
 
 The package needs no build and runs no install script. Node.js 24 or later.
