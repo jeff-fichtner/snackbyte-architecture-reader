@@ -43,7 +43,8 @@ function append(prefix: readonly string[], suffix: readonly string[]): readonly 
  * Every distinct path from every entry, one trip each. A function is walked as control flow: a branch
  * divides the path, a loop body is walked taken once and not taken, `return` and an uncaught `throw`
  * end it, an error answer ends the trip. At each call into the codebase, the callee is walked in
- * place; any other call can throw, which walked code may catch. A part already on the call stack is not walked again, which ends recursion.
+ * place. A part already on the call stack is not walked again, which ends recursion. Any other call
+ * can throw, and walked code may catch it.
  */
 export function collectTrips(
   index: PartIndex,
