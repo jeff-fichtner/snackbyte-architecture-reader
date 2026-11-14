@@ -12,6 +12,39 @@ describe('refusals and checkpoints', () => {
     expect(whats(`${H}#lookup`)[1]).toBe('not allowed');
   });
 
+  describe('a message written with values filled in when the code runs', () => {
+    const M = 'src/messages.ts';
+
+    it('reads a template literal with each substitution as one placeholder', () => {
+      expect(whats(`${M}#configured`)).toEqual([
+        'Missing required configuration: …',
+        '… … is not https',
+        '… is unknown',
+      ]);
+    });
+
+    it('writes a substitution that is a const string as its text', () => {
+      expect(whats(`${M}#secret`)).toEqual(['SIGNING_KEY cannot be read']);
+    });
+
+    it('reads a const holding a template the same way', () => {
+      expect(whats(`${M}#held`)).toEqual(['no such …']);
+    });
+
+    it('reads a concatenation with + the same way', () => {
+      expect(whats(`${M}#joined`)).toEqual(['unknown mode …', 'over the limit of … requests']);
+    });
+
+    it('reads a thrown template and a template given to an error answer the same way', () => {
+      expect(whats(`${M}#thrownText`)).toEqual(['refused …']);
+      expect(whats(`${M}#answered`)).toEqual(['gone: …']);
+    });
+
+    it('takes the class when the written text has no letter or digit', () => {
+      expect(whats(`${M}#onlyValues`)).toEqual(['Error']);
+    });
+  });
+
   it('takes the class name when the message is a variable, even one the compiler has narrowed', () => {
     expect(whats(`${H}#lookup`)[0]).toBe('NotFound');
   });

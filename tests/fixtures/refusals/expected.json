@@ -112,6 +112,98 @@
           "what": "unknown"
         }
       ]
+    },
+    {
+      "id": "src/messages.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/failure.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#SECRET",
+      "kind": "variable"
+    },
+    {
+      "id": "src/messages.ts#answered",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/failure.ts#fail",
+          "kind": "calls"
+        }
+      ],
+      "refuses": [
+        {
+          "what": "gone: …"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#configured",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "Missing required configuration: …"
+        },
+        {
+          "what": "… … is not https"
+        },
+        {
+          "what": "… is unknown"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#held",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "no such …"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#joined",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "unknown mode …"
+        },
+        {
+          "what": "over the limit of … requests"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#onlyValues",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "Error"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#secret",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "SIGNING_KEY cannot be read"
+        }
+      ]
+    },
+    {
+      "id": "src/messages.ts#thrownText",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "refused …"
+        }
+      ]
     }
   ],
   "trips": [
