@@ -186,6 +186,21 @@ The reader follows a function from where it is passed to where it is called.
 When one entry has more distinct paths than the path limit (1000 unless the settings raise it), the
 reader stops, naming the entry. It never lists some paths and drops the rest.
 
+### What a path does not see
+
+Two kinds of code are left off the paths. Following either one multiplies an entry's paths beyond
+what a list of trips can hold.
+
+- **A `catch` reached only from code the reader cannot follow.** A path continues into a `catch`
+  only from a `throw` in walked code. A call into a package or a built-in, or through a value or a
+  parameter that names no part, is not taken as able to throw. So a `catch` whose `try` throws only
+  through such calls is on no path. Its calls still appear as `calls` relationships, but the parts
+  it reaches appear on no trip from there.
+- **A tagged template.** `` html`…` `` is a use of its tag as a value, not a call. A codebase
+  function used as a tag is not a `calls` target and not a step where the template is written. It
+  starts trips of its own with the rule `value`, and is handed on by the parts that hold the
+  templates.
+
 ## What a consumer adds
 
 Ids of its own, which parts it draws and how it folds the rest into them, trip ids, zones, doors,
