@@ -50,8 +50,6 @@ describe('the published package', () => {
       }
     ).version;
     const readme = readFileSync(join(root, 'README.md'), 'utf8');
-    expect(readme).toContain(
-      `/releases/download/v${version}/snackbyte-architecture-reader-${version}.tgz`,
-    );
+    expect(readme).toContain(`@snackbyte/architecture-reader@${version}`);
   });
 });

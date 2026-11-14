@@ -1,9 +1,17 @@
 {
-  "name": "snackbyte-architecture-reader",
+  "name": "@snackbyte/architecture-reader",
   "version": "0.3.0",
   "description": "Reads a TypeScript codebase with the compiler and reports, deterministically, how its parts relate, where each function turns a request away, and every path from each entry into the code.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeff-fichtner/snackbyte-architecture-reader.git"
+  },
+  "homepage": "https://github.com/jeff-fichtner/snackbyte-architecture-reader#readme",
+  "bugs": {
+    "url": "https://github.com/jeff-fichtner/snackbyte-architecture-reader/issues"
+  },
   "engines": {
     "node": ">=24"
   },
@@ -16,6 +24,7 @@
   ],
   "scripts": {
     "prepack": "npm run build",
+    "prepublishOnly": "npm run check:all",
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -37,9 +46,5 @@
     "prettier": "3.10.0",
     "typescript-eslint": "8.72.2",
     "vitest": "5.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jeff-fichtner/snackbyte-architecture-reader.git"
   }
 }

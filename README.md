@@ -33,21 +33,21 @@ it into whatever file it draws from.
 
 ## Install
 
-Each release carries the packed package, built, as an asset of its GitHub release. Install one
-exact version from it; npm records the tarball's integrity, so `npm ci` installs the same bytes:
+The package is `@snackbyte/architecture-reader` on npm. Install one exact version; the lockfile
+pins it, so `npm ci` installs the same bytes:
 
 ```text
-npm install --save-dev https://github.com/jeff-fichtner/snackbyte-architecture-reader/releases/download/v0.3.0/snackbyte-architecture-reader-0.3.0.tgz
+npm install --save-dev --save-exact @snackbyte/architecture-reader@0.3.0
 ```
 
 The package needs no build and runs no install script. Node.js 24 or later.
 
 ## Release
 
-On `main`, at the commit to release, with `version` in `package.json` set to the release's
-version: `npm pack` builds and packs `snackbyte-architecture-reader-<version>.tgz`, and
-`gh release create v<version> snackbyte-architecture-reader-<version>.tgz` publishes it with its
-tag.
+Set `version` in `package.json` and merge to `main`. The release workflow runs the gate, tags
+`v<version>` and stages the version on npm, where it goes public once approved with 2FA. The steps,
+and the one-time setup, are in
+[RELEASING.md](https://github.com/jeff-fichtner/snackbyte-architecture-reader/blob/main/RELEASING.md).
 
 ## Develop
 

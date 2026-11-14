@@ -67,8 +67,12 @@ from the root. `name` is the qualified name inside it, members joined by `.` (`R
 - `status` (optional): only when the argument at that position can, by its type, be at least
   `atLeast`: a number literal, or a union with any member that high. An argument the compiler types
   only as `number` does not match.
-- `what` (optional): the refusal's words are the string literal (or `const` declared as one) at that
-  argument; otherwise the rule's name.
+- `what` (optional): the refusal's words are the written message at that argument (see the report's
+  [`refuses`](report.md#refuses)); otherwise the rule's name.
+
+A rule matches calls by their declaration, never by what they send. An answer that turns a request
+away without an error status, such as a redirect to an error page, is an error answer only through a
+helper a rule names: wrap such answers in one helper, and name it.
 
 ## When the reader stops
 
