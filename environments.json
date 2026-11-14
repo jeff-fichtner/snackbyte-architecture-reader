@@ -1,0 +1,12 @@
+{
+  "$comment": "Release channels, read by the release-flow action under version-strategy: package-json. It reads `branch` (is this push a release channel?) and `tagSuffix` (stamped on the derived tag). The version itself comes from package.json.",
+  "environments": [
+    {
+      "name": "release",
+      "branch": "main",
+      "isPublicFace": true,
+      "noindex": false,
+      "tagSuffix": ""
+    }
+  ]
+}

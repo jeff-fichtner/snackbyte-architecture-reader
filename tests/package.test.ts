@@ -6,10 +6,11 @@ import { describe, expect, it } from 'vitest';
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as {
   files: string[];
+  license: string;
 };
 
 // npm ships these whatever `files` says.
-const ALWAYS_SHIPPED = ['package.json', 'README.md'];
+const ALWAYS_SHIPPED = ['package.json', 'README.md', 'LICENSE'];
 
 function shipped(path: string): boolean {
   if (ALWAYS_SHIPPED.includes(path)) {
@@ -28,6 +29,12 @@ function relativeLinks(file: string): string[] {
 }
 
 describe('the published package', () => {
+  it('ships a license file matching the license it declares', () => {
+    expect(manifest.license).toBe('MIT');
+    expect(shipped('LICENSE')).toBe(true);
+    expect(readFileSync(join(root, 'LICENSE'), 'utf8')).toMatch(/^MIT License\n/);
+  });
+
   it('ships the report and settings formats', () => {
     expect(shipped('docs/report.md')).toBe(true);
     expect(shipped('docs/settings.md')).toBe(true);
@@ -50,8 +57,6 @@ describe('the published package', () => {
       }
     ).version;
     const readme = readFileSync(join(root, 'README.md'), 'utf8');
-    expect(readme).toContain(
-      `/releases/download/v${version}/snackbyte-architecture-reader-${version}.tgz`,
-    );
+    expect(readme).toContain(`@snackbyte/architecture-reader@${version}`);
   });
 });

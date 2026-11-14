@@ -1,0 +1,106 @@
+# Releases the package to npm: set `version` in package.json, merge to main. The release job runs
+# the gate, then the release-flow action tags `v<version>`; the publish job stages that version on
+# npm, and it goes public only when the owner approves it on npmjs.com with 2FA (RELEASING.md).
+#
+# No npm token exists anywhere: `id-token: write` lets GitHub mint a short-lived OIDC identity, and
+# npm accepts it because the package's trusted publisher names this file, `release.yml`. The
+# repository is public, so npm attests provenance; `--provenance` makes a run that cannot attest
+# fail instead of staging without it.
+#
+# The two jobs hold different credentials: the token that can push a tag never shares a job with
+# the identity that can stage on npm.
+#
+# Every `uses:` is pinned to a full commit SHA, with the tag it tracks in a comment;
+# .github/dependabot.yml moves the pins. The npm that stages is pinned too: staged publishing needs
+# npm 11.15 or later, which the npm bundled with a Node release may not be.
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the derived tag
+    outputs:
+      is-env: ${{ steps.release.outputs.is-env }}
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history and tags: the derivation refuses a shallow clone
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      # A merge was checked against the base it had then, so the gate runs again on what landed,
+      # before any tag is derived.
+      - run: npm ci && npm run check:all
+
+      # A push with no new version has nothing to release: its version is tagged and on npm. A tag
+      # whose version is not on npm, staged and awaiting approval or never staged, is not released,
+      # so the release flow below refuses it, loudly. Before the package's first version exists,
+      # nothing can stage: the run says so and releases nothing (RELEASING.md, the bootstrap).
+      - id: released
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          if ! view="$(npm view "${name}" name 2>&1)"; then
+            if printf '%s' "${view}" | grep -q E404; then
+              echo "already=true" >> "$GITHUB_OUTPUT"
+              echo "::warning::${name} is not on npm yet. Publish its first version by hand (RELEASING.md); nothing is released until then."
+              exit 0
+            fi
+            printf '%s\n' "${view}"
+            exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/v${version}" >/dev/null \
+            && [ "$(npm view "${name}@${version}" version 2>/dev/null)" = "${version}" ]; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "${name}@${version} is tagged and published; nothing to release."
+          fi
+
+      - id: release
+        if: steps.released.outputs.already != 'true'
+        uses: jeff-fichtner/snackbyte-release-flow-action@01d5fa53356ad4b04b2388a43eda867cc947b670 # v1.2.7
+        with:
+          version-strategy: package-json
+
+  publish:
+    needs: release
+    if: needs.release.outputs.is-env == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # trusted publishing (OIDC): the whole npm credential
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - run: npm install -g npm@12.2.1
+
+      - run: npm ci
+
+      # Staged, not published: the version goes public only when the owner approves it on
+      # npmjs.com with 2FA. The trusted publisher allows `npm stage publish` alone, so a direct
+      # `npm publish` is refused. Staging runs prepublishOnly (the gate) and prepack (the build).
+      - run: npm stage publish --access public --provenance
+        # no NODE_AUTH_TOKEN: the OIDC identity above is the credential
