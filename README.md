@@ -37,7 +37,7 @@ The package is `@snackbyte/architecture-reader` on npm. Install one exact versio
 pins it, so `npm ci` installs the same bytes:
 
 ```text
-npm install --save-dev --save-exact @snackbyte/architecture-reader@0.3.0
+npm install --save-dev --save-exact @snackbyte/architecture-reader@0.3.1
 ```
 
 The package needs no build and runs no install script. Node.js 24 or later.
