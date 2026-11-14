@@ -21,14 +21,31 @@ export function outermost(node: ts.Node): ts.Node {
   return n;
 }
 
+/** A call, a `new`, or a tagged template, which calls its tag. */
+export type CallLike = ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression;
+
+export function isCallLike(node: ts.Node): node is CallLike {
+  return (
+    ts.isCallExpression(node) || ts.isNewExpression(node) || ts.isTaggedTemplateExpression(node)
+  );
+}
+
+/** The expression a call-like node calls: a tagged template's tag, or a call's callee. */
+export function calleeOf(call: CallLike): ts.Expression {
+  return ts.isTaggedTemplateExpression(call) ? call.tag : call.expression;
+}
+
+/** The values a call-like node passes: a call's arguments, or a tagged template's substitutions. */
+export function argumentsOf(call: CallLike): readonly ts.Expression[] {
+  if (!ts.isTaggedTemplateExpression(call)) return call.arguments ?? [];
+  const template = call.template;
+  return ts.isTemplateExpression(template) ? template.templateSpans.map((s) => s.expression) : [];
+}
+
 export function isCallee(node: ts.Node): boolean {
   const n = outermost(node);
   const parent = n.parent;
-  return (
-    !!parent &&
-    (ts.isCallExpression(parent) || ts.isNewExpression(parent)) &&
-    parent.expression === n
-  );
+  return !!parent && isCallLike(parent) && calleeOf(parent) === n;
 }
 
 /** Whether an identifier or property name is a declaration's own name rather than a use of it. */

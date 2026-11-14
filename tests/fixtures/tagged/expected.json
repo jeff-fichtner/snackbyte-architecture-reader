@@ -1,0 +1,116 @@
+{
+  "format": 2,
+  "parts": [
+    {
+      "id": "src/html.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/html.ts#html",
+      "kind": "function"
+    },
+    {
+      "id": "src/html.ts#tags",
+      "kind": "variable"
+    },
+    {
+      "id": "src/html.ts#tags.bold",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/html.ts#html",
+          "kind": "calls"
+        }
+      ],
+      "handedOnBy": [
+        "src/html.ts"
+      ]
+    },
+    {
+      "id": "src/page.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/html.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/page.ts#escape",
+      "kind": "function"
+    },
+    {
+      "id": "src/page.ts#nested",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/html.ts#html",
+          "kind": "calls"
+        },
+        {
+          "to": "src/html.ts#tags.bold",
+          "kind": "calls"
+        },
+        {
+          "to": "src/page.ts#escape",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/page.ts#raw",
+      "kind": "function"
+    },
+    {
+      "id": "src/page.ts#render",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/html.ts#html",
+          "kind": "calls"
+        },
+        {
+          "to": "src/page.ts#escape",
+          "kind": "calls"
+        }
+      ]
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/html.ts#tags.bold",
+      "rule": "value",
+      "steps": [
+        "src/html.ts#tags.bold",
+        "src/html.ts#html"
+      ]
+    },
+    {
+      "entry": "src/page.ts#nested",
+      "rule": "page",
+      "steps": [
+        "src/page.ts#nested",
+        "src/page.ts#escape",
+        "src/html.ts#tags.bold",
+        "src/html.ts#html"
+      ]
+    },
+    {
+      "entry": "src/page.ts#raw",
+      "rule": "page",
+      "steps": [
+        "src/page.ts#raw"
+      ]
+    },
+    {
+      "entry": "src/page.ts#render",
+      "rule": "page",
+      "steps": [
+        "src/page.ts#render",
+        "src/page.ts#escape",
+        "src/html.ts#html"
+      ]
+    }
+  ]
+}

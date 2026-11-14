@@ -71,7 +71,9 @@ Positions count unnamed functions, not lines, so an id holds while lines elsewhe
   and `import("…")` types.
 - `calls`: from the innermost function or method holding the call (or the file, for top-level code)
   to the function, method or class the compiler resolves it to. `new X()` calls `X`'s constructor,
-  or `X` when it has none. A call through a parameter goes to the one function the parameter holds
+  or `X` when it has none. A tagged template (`` html`…` ``) calls its tag, and is a call wherever
+  this report speaks of one: the tag is a step of the path there, after the substitutions, and a
+  function used only as a tag is not used as a value. A call through a parameter goes to the one function the parameter holds
   there, when it holds exactly one (see
   [Functions passed through parameters](#functions-passed-through-parameters)); any other call
   through an interface or a function-typed value names no part and is left out.

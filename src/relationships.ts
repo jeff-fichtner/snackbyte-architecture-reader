@@ -3,6 +3,7 @@ import type { Codebase, CodebaseFile } from './codebase.js';
 import { packageId } from './ids.js';
 import { owningPart, type Part, type PartIndex } from './parts.js';
 import type { Relationship } from './report.js';
+import { calleeOf, isCallLike, type CallLike } from './syntax.js';
 
 /** What a call or a reference resolves to: a codebase part, a kept package, or nothing we report. */
 export interface Target {
@@ -44,12 +45,15 @@ export class Resolver {
     return resolved.valueDeclaration ?? resolved.declarations?.[0];
   }
 
-  /** What a call or `new` resolves to. `new X()` without a constructor of its own names `X`. */
-  callee(call: ts.CallExpression | ts.NewExpression, checker: ts.TypeChecker): Target {
+  /**
+   * What a call, a `new` or a tagged template resolves to. `new X()` without a constructor of its own
+   * names `X`; a tagged template names its tag.
+   */
+  callee(call: CallLike, checker: ts.TypeChecker): Target {
     const signature = checker.getResolvedSignature(call);
     const declaration = signature?.declaration;
     if (declaration && !ts.isJSDocSignature(declaration)) return this.targetOf(declaration);
-    const symbol = checker.getSymbolAtLocation(call.expression);
+    const symbol = checker.getSymbolAtLocation(calleeOf(call));
     return this.targetOf(this.declarationOf(symbol, checker));
   }
 
@@ -82,8 +86,8 @@ function isImportCall(node: ts.Node): node is ts.CallExpression {
 
 /**
  * Every part's relationships: `imports` file to file, `calls` from the innermost function, method
- * or file holding the call (including a call through a parameter that reaches exactly one codebase
- * function), and `implements` / `extends` from a class or interface.
+ * or file holding the call or tagged template (including a call through a parameter that reaches
+ * exactly one codebase function), and `implements` / `extends` from a class or interface.
  */
 export function collectRelationships(
   codebase: Codebase,
@@ -113,7 +117,7 @@ export function collectRelationships(
         }
       } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) {
         add(filePart, idOf(resolver.module(node.argument.literal, checker)), 'imports');
-      } else if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+      } else if (isCallLike(node)) {
         const bound = ts.isCallExpression(node) ? boundCalls.get(node) : undefined;
         const to = idOf(resolver.callee(node, checker)) ?? bound?.id;
         add(owningPart(node, index, file), to, 'calls');

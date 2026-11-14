@@ -1,0 +1,7 @@
+{
+  "format": 1,
+  "projects": ["tsconfig.json"],
+  "entries": [
+    { "name": "page", "declarations": ["src/page.ts#render", "src/page.ts#raw", "src/page.ts#nested"] }
+  ]
+}

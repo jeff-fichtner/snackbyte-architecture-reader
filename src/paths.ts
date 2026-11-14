@@ -5,6 +5,7 @@ import type { Part, PartIndex } from './parts.js';
 import type { RefusalIndex } from './refusals.js';
 import type { Resolver } from './relationships.js';
 import { compare, compareLists, type Trip } from './report.js';
+import { argumentsOf, calleeOf, isCallLike, type CallLike } from './syntax.js';
 
 /**
  * How a stretch of code ends:
@@ -41,7 +42,7 @@ function append(prefix: readonly string[], suffix: readonly string[]): readonly 
  * Every distinct path from every entry, one trip each. A function is walked as control flow: a branch
  * divides the path, a loop body is walked taken once and not taken, `return` and an uncaught `throw`
  * end it, an error answer ends the trip. At each call into the codebase, the callee is walked in
- * place. A part already on the call stack is not walked again, which ends recursion.
+ * place; a tagged template calls its tag. A part already on the call stack is not walked again, which ends recursion.
  */
 export function collectTrips(
   index: PartIndex,
@@ -185,7 +186,7 @@ export function collectTrips(
     if (!fn) return out;
     const visit = (node: ts.Node): void => {
       if (node !== fn && index.byNode.get(node)?.fn === node) return;
-      if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+      if (isCallLike(node)) {
         const target = callTarget(node, part);
         if (target) out.push(target);
         out.push(...(entries.handedOver.get(node) ?? []));
@@ -196,7 +197,7 @@ export function collectTrips(
     return out;
   }
 
-  function callTarget(call: ts.CallExpression | ts.NewExpression, from: Part): Part | undefined {
+  function callTarget(call: CallLike, from: Part): Part | undefined {
     if (ts.isCallExpression(call) && call.expression.kind === ts.SyntaxKind.ImportKeyword)
       return undefined;
     const target =
@@ -380,17 +381,17 @@ export function collectTrips(
           : expression(node.right, part, stack),
       );
     }
-    if (ts.isCallExpression(node) || ts.isNewExpression(node)) return call(node, part, stack);
+    if (isCallLike(node)) return call(node, part, stack);
     return children(node, part, stack);
   }
 
-  function call(node: ts.CallExpression | ts.NewExpression, part: Part, stack: Part[]): Outcome[] {
-    const callee = node.expression;
+  function call(node: CallLike, part: Part, stack: Part[]): Outcome[] {
+    const callee = calleeOf(node);
     let outcomes: Outcome[] =
       ts.isArrowFunction(callee) || ts.isFunctionExpression(callee)
         ? [OPEN]
         : expression(callee, part, stack);
-    for (const argument of node.arguments ?? []) {
+    for (const argument of argumentsOf(node)) {
       outcomes = then(outcomes, () => expression(argument, part, stack));
     }
     const effect = (): Outcome[] => {
