@@ -1,0 +1,17 @@
+{
+  "format": 1,
+  "projects": ["tsconfig.json"],
+  "entries": [{ "name": "job", "declarations": ["src/handlers.ts#plain"] }],
+  "errorAnswers": [
+    {
+      "name": "error status",
+      "call": { "module": "fake-router", "name": "Response.status" },
+      "status": { "argument": 0, "atLeast": 400 }
+    },
+    {
+      "name": "failure page",
+      "call": { "module": "src/failure.ts", "name": "fail" },
+      "what": { "argument": 1 }
+    }
+  ]
+}

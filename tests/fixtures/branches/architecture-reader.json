@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "projects": [
+    "tsconfig.json"
+  ],
+  "entries": [
+    {
+      "name": "scenario",
+      "declarations": [
+        "src/flow.ts#straight",
+        "src/flow.ts#branch",
+        "src/flow.ts#divided",
+        "src/flow.ts#switching",
+        "src/flow.ts#ternary",
+        "src/flow.ts#logical",
+        "src/flow.ts#optional",
+        "src/flow.ts#loop",
+        "src/flow.ts#guard",
+        "src/flow.ts#caught",
+        "src/flow.ts#returns",
+        "src/flow.ts#recursive",
+        "src/flow.ts#collapse",
+        "src/flow.ts#answered"
+      ]
+    }
+  ],
+  "errorAnswers": [
+    {
+      "name": "refused",
+      "call": {
+        "module": "src/flow.ts",
+        "name": "refuse"
+      }
+    }
+  ]
+}

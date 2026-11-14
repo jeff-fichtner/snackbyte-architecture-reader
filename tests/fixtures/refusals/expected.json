@@ -1,0 +1,126 @@
+{
+  "format": 1,
+  "parts": [
+    {
+      "id": "src/failure.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/failure.ts#fail",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "error status"
+        }
+      ]
+    },
+    {
+      "id": "src/handlers.ts",
+      "kind": "file",
+      "rel": [
+        {
+          "to": "src/failure.ts",
+          "kind": "imports"
+        }
+      ]
+    },
+    {
+      "id": "src/handlers.ts#MESSAGE",
+      "kind": "variable"
+    },
+    {
+      "id": "src/handlers.ts#NotFound",
+      "kind": "class"
+    },
+    {
+      "id": "src/handlers.ts#Tagged",
+      "kind": "class",
+      "checkpoint": {
+        "what": "misplaced on a class"
+      }
+    },
+    {
+      "id": "src/handlers.ts#answers",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/failure.ts#fail",
+          "kind": "calls"
+        }
+      ],
+      "refuses": [
+        {
+          "what": "error status"
+        },
+        {
+          "what": "error status"
+        },
+        {
+          "what": "gone"
+        },
+        {
+          "what": "failure page"
+        }
+      ]
+    },
+    {
+      "id": "src/handlers.ts#emptyTag",
+      "kind": "function",
+      "checkpoint": {
+        "what": ""
+      }
+    },
+    {
+      "id": "src/handlers.ts#lookup",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "NotFound"
+        },
+        {
+          "what": "not allowed"
+        }
+      ]
+    },
+    {
+      "id": "src/handlers.ts#plain",
+      "kind": "function"
+    },
+    {
+      "id": "src/handlers.ts#requireSession",
+      "kind": "function",
+      "refuses": [
+        {
+          "what": "not signed in"
+        }
+      ],
+      "checkpoint": {
+        "what": "the session cookie is signed and current"
+      }
+    },
+    {
+      "id": "src/handlers.ts#rethrow",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/handlers.ts#lookup",
+          "kind": "calls"
+        }
+      ],
+      "refuses": [
+        {
+          "what": "unknown"
+        }
+      ]
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/handlers.ts#plain",
+      "rule": "job",
+      "steps": [
+        "src/handlers.ts#plain"
+      ]
+    }
+  ]
+}

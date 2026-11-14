@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "projects": [
+    "tsconfig.json"
+  ],
+  "entries": [
+    {
+      "name": "route",
+      "type": {
+        "module": "fake-router",
+        "name": "Handler"
+      }
+    },
+    {
+      "name": "hook",
+      "type": {
+        "module": "fake-engine",
+        "name": "Configuration"
+      },
+      "within": true
+    },
+    {
+      "name": "middleware",
+      "type": {
+        "module": "fake-router",
+        "name": "Middleware"
+      }
+    },
+    {
+      "name": "job",
+      "declarations": [
+        "src/app.ts#createApp"
+      ]
+    }
+  ]
+}

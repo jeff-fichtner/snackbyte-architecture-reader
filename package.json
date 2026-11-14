@@ -1,0 +1,44 @@
+{
+  "name": "snackbyte-architecture-reader",
+  "version": "0.1.0",
+  "description": "Reads a TypeScript codebase with the compiler and reports, deterministically, how its parts relate, where each function turns a request away, and every path from each entry into the code.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "architecture-reader": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "npm run build",
+    "build": "tsc -p tsconfig.build.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:consumer": "npm run build && vitest run --config vitest.consumer.config.ts",
+    "check:all": "npm run format:check && npm run lint && npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "typescript": "6.0.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.14.0",
+    "prettier": "3.10.0",
+    "typescript-eslint": "8.72.2",
+    "vitest": "5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeff-fichtner/snackbyte-architecture-reader.git"
+  }
+}

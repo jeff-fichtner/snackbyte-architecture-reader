@@ -1,0 +1,6 @@
+{
+  "format": 1,
+  "projects": ["app/tsconfig.json", "lib/tsconfig.json"],
+  "keep": ["kept"],
+  "entries": [{ "name": "job", "declarations": ["app/src/main.ts#main"] }]
+}

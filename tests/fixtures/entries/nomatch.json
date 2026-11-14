@@ -1,0 +1,5 @@
+{
+  "format": 1,
+  "projects": ["tsconfig.json"],
+  "entries": [{ "name": "request", "type": { "module": "fake-router", "name": "Request" } }]
+}
