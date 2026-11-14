@@ -11,9 +11,11 @@ import { compare, compareLists, type Trip } from './report.js';
  * - `open`: it falls through to whatever comes next;
  * - `return`, `break`, `continue`: it leaves its function or loop;
  * - `throw`: an exception is on its way out, and walked code may still catch it;
+ * - `fault`: a call the reader cannot follow may have thrown, and walked code may still catch it.
+ *   Uncaught, it ends no trip: its steps begin the path on which the call returned;
  * - `stop`: the request is turned away by an error answer, and the trip ends there.
  */
-type End = 'open' | 'return' | 'break' | 'continue' | 'throw' | 'stop';
+type End = 'open' | 'return' | 'break' | 'continue' | 'throw' | 'fault' | 'stop';
 
 interface Outcome {
   steps: readonly string[];
@@ -41,7 +43,7 @@ function append(prefix: readonly string[], suffix: readonly string[]): readonly 
  * Every distinct path from every entry, one trip each. A function is walked as control flow: a branch
  * divides the path, a loop body is walked taken once and not taken, `return` and an uncaught `throw`
  * end it, an error answer ends the trip. At each call into the codebase, the callee is walked in
- * place. A part already on the call stack is not walked again, which ends recursion.
+ * place; any other call can throw, which walked code may catch. A part already on the call stack is not walked again, which ends recursion.
  */
 export function collectTrips(
   index: PartIndex,
@@ -70,6 +72,7 @@ export function collectTrips(
     }
     const distinct = new Map<string, readonly string[]>();
     for (const outcome of outcomes) {
+      if (outcome.end === 'fault') continue;
       const steps = append([entry.id], outcome.steps);
       distinct.set(steps.join('\u0000'), steps);
     }
@@ -92,9 +95,10 @@ export function collectTrips(
     for (const o of outcomes) {
       const steps = o.steps.join('\u0000');
       seen.set(`${o.end}\u0001${steps}`, o);
-      stepLists.add(steps);
+      if (o.end !== 'fault') stepLists.add(steps);
     }
-    // The limit counts distinct step lists, as trips do: the same steps ending two ways are one path.
+    // The limit counts distinct step lists, as trips do: the same steps ending two ways are one path,
+    // and a fault is no path until it is caught.
     if (stepLists.size > pathLimit) throw new PathLimit(stepLists.size);
     return [...seen.values()];
   }
@@ -289,10 +293,9 @@ export function collectTrips(
     let outcomes = block(node.tryBlock.statements);
     const handler = node.catchClause;
     if (handler) {
-      const caught = outcomes
-        .filter((o) => o.end === 'throw')
-        .map((o) => ({ ...o, end: 'open' as End }));
-      const rest = outcomes.filter((o) => o.end !== 'throw');
+      const thrown = (o: Outcome): boolean => o.end === 'throw' || o.end === 'fault';
+      const caught = outcomes.filter(thrown).map((o) => ({ ...o, end: 'open' as End }));
+      const rest = outcomes.filter((o) => !thrown(o));
       outcomes = either(
         rest,
         caught.length > 0 ? then(caught, () => block(handler.block.statements)) : [],
@@ -402,7 +405,8 @@ export function collectTrips(
       if (target) result = then(result, () => enter(target, stack));
       const refusal = refusals.errorAnswers.get(node);
       if (refusal) result = settle(result, ['open'], 'stop');
-      return result;
+      // Code the reader cannot follow (a package, a built-in, a value) can throw from the call.
+      return target ? result : either([{ steps: [], end: 'fault' }], result);
     };
     const optional =
       ts.isCallExpression(node) &&

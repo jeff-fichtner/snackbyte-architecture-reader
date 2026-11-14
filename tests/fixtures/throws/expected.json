@@ -1,0 +1,186 @@
+{
+  "format": 2,
+  "parts": [
+    {
+      "id": "src/flow.ts",
+      "kind": "file"
+    },
+    {
+      "id": "src/flow.ts#a",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#b",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#builtIn",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#cleanedUp",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#deeper",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#parse",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#followedOnly",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#log",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#parse",
+      "kind": "function"
+    },
+    {
+      "id": "src/flow.ts#throughParameter",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#log",
+          "kind": "calls"
+        }
+      ]
+    },
+    {
+      "id": "src/flow.ts#uncaught",
+      "kind": "function",
+      "rel": [
+        {
+          "to": "src/flow.ts#a",
+          "kind": "calls"
+        },
+        {
+          "to": "src/flow.ts#b",
+          "kind": "calls"
+        }
+      ]
+    }
+  ],
+  "trips": [
+    {
+      "entry": "src/flow.ts#builtIn",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#builtIn",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#builtIn",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#builtIn",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#cleanedUp",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#cleanedUp",
+        "src/flow.ts#log",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#deeper",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#deeper",
+        "src/flow.ts#parse",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#deeper",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#deeper",
+        "src/flow.ts#parse",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#followedOnly",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#followedOnly",
+        "src/flow.ts#a"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#throughParameter",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#throughParameter"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#throughParameter",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#throughParameter",
+        "src/flow.ts#log"
+      ]
+    },
+    {
+      "entry": "src/flow.ts#uncaught",
+      "rule": "job",
+      "steps": [
+        "src/flow.ts#uncaught",
+        "src/flow.ts#a",
+        "src/flow.ts#b"
+      ]
+    }
+  ]
+}

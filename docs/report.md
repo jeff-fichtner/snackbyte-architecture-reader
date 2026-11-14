@@ -133,6 +133,12 @@ ends it unless the walked code catches it, in which case the path continues into
 error answer ends the trip. A part already on the call stack is not walked again, which ends
 recursion. Paths that reach the same parts in the same order are one trip.
 
+A call the reader cannot follow (into a package or a built-in, or through a value or a parameter
+that names no part) can throw. Where walked code catches it, the path also continues into the
+`catch` from that call, so a `try` whose body makes such a call, directly or in a function it calls,
+always has a path into its `catch`. Where nothing catches it, it makes no trip of its own: its steps
+begin the path on which the call returned.
+
 ### Entries
 
 - A function an entry rule of the settings matches.
