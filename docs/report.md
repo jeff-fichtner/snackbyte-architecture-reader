@@ -85,11 +85,19 @@ are left out.
 On functions and methods: `[{ what }]`, each point where the function turns a request away, in
 source order: every `throw`, and every call an error-answer rule of the settings matches.
 
-- For a `throw`, `what` is the error's message when it is a string literal or a `const` declared as
-  one; otherwise the class the compiler gives the thrown value; otherwise the compiler's name for
-  its type (`unknown` for a rethrown caught value).
-- For an error answer, `what` is the string literal at the rule's `what` argument; otherwise the
+- For a `throw`, `what` is the error's message, or the thrown value itself, when it is a written
+  message (below); otherwise the class the compiler gives the thrown value; otherwise the compiler's
+  name for its type (`unknown` for a rethrown caught value).
+- For an error answer, `what` is the written message at the rule's `what` argument; otherwise the
   rule's name.
+
+A written message is a string literal; a template literal; a concatenation of strings with `+`; or a
+`const` declared as any of these. Its text is what the code writes, and each part filled in when the
+code runs (a substitution, a variable, a call) reads as one `…`, adjacent ones as one:
+`` `Missing required configuration: ${name}` `` reads `Missing required configuration: …`. A part
+that is itself a written message keeps its text. A message with a `…` but no letter or digit of its
+own (`` `${a}: ${b}` ``) is not a written message, and falls back to the class. A variable the
+compiler has only narrowed to a literal is not a written message.
 
 ### `checkpoint`
 
