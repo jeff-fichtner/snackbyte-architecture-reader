@@ -73,7 +73,7 @@ jobs:
 
       - id: release
         if: steps.released.outputs.already != 'true'
-        uses: jeff-fichtner/snackbyte-release-flow-action@01d5fa53356ad4b04b2388a43eda867cc947b670 # v1.2.7
+        uses: jeff-fichtner/snackbyte-release-flow-action@2c896e2f016ddeb695eea36b404cfd093803152b # v1.2.8
         with:
           version-strategy: package-json
 
